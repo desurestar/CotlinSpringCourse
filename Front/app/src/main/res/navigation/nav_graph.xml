@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/departmentListFragment">
+
+    <fragment
+        android:id="@+id/departmentListFragment"
+        android:name="com.example.front.ui.departments.DepartmentListFragment"
+        android:label="@string/departments_title">
+        <action
+            android:id="@+id/action_departmentList_to_departmentDetail"
+            app:destination="@id/departmentDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/departmentDetailFragment"
+        android:name="com.example.front.ui.departments.DepartmentDetailFragment"
+        android:label="@string/department_detail_title">
+        <argument
+            android:name="departmentId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_departmentDetail_to_employeeDetail"
+            app:destination="@id/employeeDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/employeeDetailFragment"
+        android:name="com.example.front.ui.employees.EmployeeDetailFragment"
+        android:label="@string/employee_detail_title">
+        <argument
+            android:name="employeeId"
+            app:argType="long" />
+    </fragment>
+
+</navigation>

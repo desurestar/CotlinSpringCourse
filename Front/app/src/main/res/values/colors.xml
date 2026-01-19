@@ -2,4 +2,25 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    
+    <!-- Primary Gradient Colors -->
+    <color name="primary_gradient_start">#667eea</color>
+    <color name="primary_gradient_end">#764ba2</color>
+    
+    <!-- Background & Surface Colors -->
+    <color name="background_color">#f8f9fa</color>
+    <color name="card_background">#FFFFFF</color>
+    
+    <!-- Text Colors -->
+    <color name="text_primary">#333333</color>
+    <color name="text_secondary">#6c757d</color>
+    
+    <!-- UI Elements -->
+    <color name="divider">#e9ecef</color>
+    <color name="error">#dc3545</color>
+    <color name="success">#28a745</color>
+    
+    <!-- Additional Colors -->
+    <color name="transparent">#00000000</color>
+    <color name="overlay">#80000000</color>
 </resources>
