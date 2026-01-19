@@ -1,3 +1,61 @@
 <resources>
     <string name="app_name">Front</string>
+    
+    <!-- Auth Screens -->
+    <string name="login_title">Вход в систему</string>
+    <string name="register_title">Регистрация</string>
+    <string name="email">Email</string>
+    <string name="password">Пароль</string>
+    <string name="role">Роль</string>
+    <string name="login_button">Войти</string>
+    <string name="register_button">Зарегистрироваться</string>
+    <string name="no_account">Нет аккаунта? Зарегистрироваться</string>
+    <string name="have_account">Есть аккаунт? Войти</string>
+    
+    <!-- Validation Messages -->
+    <string name="error_empty_email">Введите email</string>
+    <string name="error_invalid_email">Некорректный email</string>
+    <string name="error_empty_password">Введите пароль</string>
+    <string name="error_short_password">Пароль должен быть не менее 6 символов</string>
+    
+    <!-- Departments -->
+    <string name="departments_title">Отделы</string>
+    <string name="department_detail_title">Детали отдела</string>
+    <string name="search_departments">Поиск отделов…</string>
+    <string name="employee_count">Сотрудников: %d</string>
+    <string name="employees_title">Сотрудники</string>
+    <string name="no_departments">Отделы не найдены</string>
+    <string name="no_employees">Сотрудники не найдены</string>
+    
+    <!-- Employees -->
+    <string name="employee_detail_title">Детали сотрудника</string>
+    <string name="employee_info">Информация</string>
+    <string name="employee_department">Отдел</string>
+    <string name="employee_post">Должность</string>
+    <string name="employee_email">Email</string>
+    <string name="employee_role">Роль</string>
+    <string name="employee_id">ID: %d</string>
+    
+    <!-- Actions -->
+    <string name="action_logout">Выход</string>
+    <string name="action_add">Добавить</string>
+    <string name="action_edit">Редактировать</string>
+    <string name="action_delete">Удалить</string>
+    <string name="action_save">Сохранить</string>
+    <string name="action_cancel">Отмена</string>
+    
+    <!-- Common -->
+    <string name="loading">Загрузка…</string>
+    <string name="error_occurred">Произошла ошибка</string>
+    <string name="success">Успешно</string>
+    <string name="logout_confirm">Вы уверены, что хотите выйти?</string>
+    
+    <!-- Empty States -->
+    <string name="empty_state_departments">📋\n\nНет отделов для отображения</string>
+    <string name="empty_state_employees">👥\n\nНет сотрудников для отображения</string>
+    
+    <!-- Roles -->
+    <string name="role_student">STUDENT</string>
+    <string name="role_employee">EMPLOYEE</string>
+    <string name="role_admin">ADMIN</string>
 </resources>
