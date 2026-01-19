@@ -42,7 +42,7 @@ public class SecurityConfig {
                         
                         // Web endpoints
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/departments/**", "/employe/**").hasAnyRole("ADMIN", "EMPLOYEE")
+                        .requestMatchers("/departments/**", "/employees/**").hasAnyRole("ADMIN", "EMPLOYEE")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

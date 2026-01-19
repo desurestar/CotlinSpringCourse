@@ -8,6 +8,7 @@ import kaf.pin.lab1corp.exception.BadRequestException;
 import kaf.pin.lab1corp.exception.ResourceNotFoundException;
 import kaf.pin.lab1corp.service.DepartmentService;
 import kaf.pin.lab1corp.service.GroupsService;
+import kaf.pin.lab1corp.util.RequestParamUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,7 +89,7 @@ public class GroupRestController {
     public ResponseEntity<GroupResponse> createGroup(@RequestBody Map<String, Object> request) {
         try {
             String groupName = (String) request.get("groupName");
-            Long departmentId = getLongValue(request.get("departmentId"));
+            Long departmentId = RequestParamUtil.getLongValue(request.get("departmentId"));
             
             if (groupName == null || groupName.trim().isEmpty()) {
                 throw new BadRequestException("Group name is required");
@@ -128,7 +129,7 @@ public class GroupRestController {
             }
             
             String groupName = (String) request.get("groupName");
-            Long departmentId = getLongValue(request.get("departmentId"));
+            Long departmentId = RequestParamUtil.getLongValue(request.get("departmentId"));
             
             Groups group = groupOpt.get();
             
@@ -187,22 +188,5 @@ public class GroupRestController {
         
         return new GroupResponse(group.getId(), group.getGroup_name(), 
                                departmentResponse, studentCount);
-    }
-
-    private Long getLongValue(Object value) {
-        if (value == null) {
-            return null;
-        }
-        if (value instanceof Number) {
-            return ((Number) value).longValue();
-        }
-        if (value instanceof String) {
-            try {
-                return Long.parseLong((String) value);
-            } catch (NumberFormatException e) {
-                return null;
-            }
-        }
-        return null;
     }
 }

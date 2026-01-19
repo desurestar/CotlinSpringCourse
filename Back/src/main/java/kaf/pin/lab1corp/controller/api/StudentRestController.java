@@ -12,6 +12,7 @@ import kaf.pin.lab1corp.exception.ResourceNotFoundException;
 import kaf.pin.lab1corp.service.GroupsService;
 import kaf.pin.lab1corp.service.StudentsService;
 import kaf.pin.lab1corp.service.UserService;
+import kaf.pin.lab1corp.util.RequestParamUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,7 +96,7 @@ public class StudentRestController {
     public ResponseEntity<StudentResponse> createStudent(@RequestBody Map<String, Object> request) {
         try {
             String name = (String) request.get("name");
-            Long groupId = getLongValue(request.get("groupId"));
+            Long groupId = RequestParamUtil.getLongValue(request.get("groupId"));
             String email = (String) request.get("email");
             String password = (String) request.get("password");
             
@@ -154,7 +155,7 @@ public class StudentRestController {
             }
             
             String name = (String) request.get("name");
-            Long groupId = getLongValue(request.get("groupId"));
+            Long groupId = RequestParamUtil.getLongValue(request.get("groupId"));
             
             Students student = studentOpt.get();
             
@@ -218,22 +219,5 @@ public class StudentRestController {
         
         return new StudentResponse(student.getId(), student.getName(), 
                                   groupResponse, userResponse);
-    }
-
-    private Long getLongValue(Object value) {
-        if (value == null) {
-            return null;
-        }
-        if (value instanceof Number) {
-            return ((Number) value).longValue();
-        }
-        if (value instanceof String) {
-            try {
-                return Long.parseLong((String) value);
-            } catch (NumberFormatException e) {
-                return null;
-            }
-        }
-        return null;
     }
 }

@@ -14,6 +14,7 @@ import kaf.pin.lab1corp.service.DepartmentService;
 import kaf.pin.lab1corp.service.EmployeeService;
 import kaf.pin.lab1corp.service.PostService;
 import kaf.pin.lab1corp.service.UserService;
+import kaf.pin.lab1corp.util.RequestParamUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,8 +100,8 @@ public class EmployeeRestController {
     public ResponseEntity<EmployeeResponse> createEmployee(@RequestBody Map<String, Object> request) {
         try {
             String name = (String) request.get("name");
-            Long postId = getLongValue(request.get("postId"));
-            Long departmentId = getLongValue(request.get("departmentId"));
+            Long postId = RequestParamUtil.getLongValue(request.get("postId"));
+            Long departmentId = RequestParamUtil.getLongValue(request.get("departmentId"));
             String email = (String) request.get("email");
             String password = (String) request.get("password");
             String role = (String) request.get("role");
@@ -169,8 +170,8 @@ public class EmployeeRestController {
             }
             
             String name = (String) request.get("name");
-            Long postId = getLongValue(request.get("postId"));
-            Long departmentId = getLongValue(request.get("departmentId"));
+            Long postId = RequestParamUtil.getLongValue(request.get("postId"));
+            Long departmentId = RequestParamUtil.getLongValue(request.get("departmentId"));
             
             Employes employee = employeeOpt.get();
             
@@ -240,22 +241,5 @@ public class EmployeeRestController {
             
         return new EmployeeResponse(employee.getId(), employee.getName(), 
                                    postResponse, departmentResponse, userResponse);
-    }
-
-    private Long getLongValue(Object value) {
-        if (value == null) {
-            return null;
-        }
-        if (value instanceof Number) {
-            return ((Number) value).longValue();
-        }
-        if (value instanceof String) {
-            try {
-                return Long.parseLong((String) value);
-            } catch (NumberFormatException e) {
-                return null;
-            }
-        }
-        return null;
     }
 }

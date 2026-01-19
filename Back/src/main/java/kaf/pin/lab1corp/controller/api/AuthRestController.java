@@ -44,7 +44,8 @@ public class AuthRestController {
             
             Users user = userOpt.get();
             
-            // Simple password check (not encrypted in current implementation)
+            // NOTE: Simple password check (not encrypted in current implementation)
+            // TODO: This should use password encoder for production use
             if (!user.getPassword().equals(request.getPassword())) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
@@ -95,16 +96,17 @@ public class AuthRestController {
             String token = authHeader.substring(7);
             String email = jwtService.extractEmail(token);
             
-            if (jwtService.isTokenExpired(token)) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            }
-            
+            // Validate token signature and expiration
             Optional<Users> userOpt = userService.findByEmail(email);
             if (userOpt.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
             
             Users user = userOpt.get();
+            if (!jwtService.validateToken(token, user.getEmail())) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+            
             UserResponse response = new UserResponse(user.getId(), user.getEmail(), user.getRole());
             
             return ResponseEntity.ok(response);
