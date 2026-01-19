@@ -71,7 +71,7 @@ public class AuthRestController {
             Users user = new Users();
             user.setEmail(request.getEmail());
             user.setPassword(request.getPassword());
-            user.setRole(request.getRole());
+            user.setRole(request.getRole() != null ? request.getRole() : "STUDENT"); // Default to STUDENT if role not provided
             user.setEnabled(true);
             
             Users savedUser = userService.saveUser(user);
