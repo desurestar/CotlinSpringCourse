@@ -1,22 +1,20 @@
-/*
 package kaf.pin.lab1corp.repository;
 
-
-import kaf.pin.lab1corp.mapper.GroupsMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
+import kaf.pin.lab1corp.entity.Groups;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 
 @Repository
-public class GroupsRepository {
-    private final JdbcTemplate jdbcTemplate;
-    private final GroupsMapper groupsMapper;
+public interface GroupsRepository extends CrudRepository<Groups, Long> {
 
-    public GroupsRepository(JdbcTemplate jdbcTemplate, GroupsMapper groupsMapper) {
-        this.jdbcTemplate = jdbcTemplate;
-        this.groupsMapper = groupsMapper;
-    }
+    List<Groups> findByDepartmentId(Long departmentId);
 
+    List<Groups> findByGroup_nameContainsIgnoreCase(String groupName);
 
+    @Query("SELECT g FROM Groups g LEFT JOIN FETCH g.department LEFT JOIN FETCH g.studentsList")
+    List<Groups> findAllWithDetails();
 }
-*/
