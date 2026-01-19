@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Регистрация</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+        background-color: #f8f9fa;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        padding: 20px;
+    }
+    .register-container {
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+    .register-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        padding: 40px 35px;
+        border: none;
+    }
+    .register-header {
+        text-align: center;
+        margin-bottom: 35px;
+    }
+    .register-logo {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        width: 80px;
+        height: 80px;
+        line-height: 80px;
+        border-radius: 50%;
+        font-size: 32px;
+        margin: 0 auto 20px;
+    }
+    .register-title {
+        font-size: 28px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 8px;
+    }
+    .register-subtitle {
+        color: #6c757d;
+        font-size: 16px;
+        margin-bottom: 0;
+    }
+    .form-control {
+        height: 50px;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        padding-left: 15px;
+        font-size: 15px;
+    }
+    .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+    .form-label {
+        font-weight: 500;
+        margin-bottom: 8px;
+        color: #495057;
+    }
+    .btn-register {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        height: 50px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 16px;
+        transition: all 0.3s ease;
+    }
+    .btn-register:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+    .login-link {
+        text-align: center;
+        margin-top: 25px;
+        color: #6c757d;
+        font-size: 15px;
+    }
+    .login-link a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .login-link a:hover {
+        text-decoration: underline;
+    }
+    .alert {
+        border-radius: 8px;
+        padding: 15px;
+    }
+    .form-text {
+        font-size: 13px;
+        color: #6c757d;
+    }
+    .progress {
+        height: 6px;
+        margin-top: 5px;
+    }
+    .password-strength {
+        font-size: 13px;
+        margin-top: 3px;
+    }
+  </style>
+</head>
+<body>
+<div class="register-container">
+  <div class="register-card">
+    <div class="register-header">
+      <div class="register-logo">
+        <i class="fas fa-user-plus"></i>
+      </div>
+      <h2 class="register-title">Создание аккаунта</h2>
+      <p class="register-subtitle">Заполните форму для регистрации</p>
+    </div>
+
+    <!-- Сообщение об ошибке -->
+    <div th:if="${error}" class="alert alert-danger">
+      <i class="fas fa-exclamation-circle me-2"></i>
+      <span th:text="${error}">Ошибка регистрации</span>
+    </div>
+
+    <!-- Сообщение об успехе -->
+    <div th:if="${success}" class="alert alert-success">
+      <i class="fas fa-check-circle me-2"></i>
+      <span th:text="${success}">Регистрация успешна</span>
+    </div>
+
+    <form th:action="@{/register}" th:object="${user}" method="post">
+      <!-- ФИО -->
+      <div class="mb-4">
+        <label class="form-label">ФИО *</label>
+        <input type="text" class="form-control" th:field="*{name}" required
+               placeholder="Иванов Иван Иванович">
+        <div class="form-text">Введите полное ФИО</div>
+      </div>
+
+      <!-- Email -->
+      <div class="mb-4">
+        <label class="form-label">Email *</label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+          <input type="email" class="form-control" th:field="*{email}" required
+                 placeholder="ivanov@example.com">
+        </div>
+        <div class="form-text">Будет использоваться для входа в систему</div>
+      </div>
+
+      <!-- Пароль -->
+      <div class="mb-4">
+        <label class="form-label">Пароль *</label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="fas fa-lock"></i></span>
+          <input type="password" class="form-control" th:field="*{password}"
+                 id="password" required minlength="6"
+                 placeholder="Не менее 6 символов">
+        </div>
+        <div class="progress mt-2">
+          <div class="progress-bar" id="password-strength-bar"
+               role="progressbar" style="width: 0%"></div>
+        </div>
+        <div class="password-strength" id="password-strength-text">
+          Введите пароль
+        </div>
+      </div>
+
+      <!-- Подтверждение пароля -->
+      <div class="mb-4">
+        <label class="form-label">Подтверждение пароля *</label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="fas fa-lock"></i></span>
+          <input type="password" class="form-control" name="confirmPassword"
+                 id="confirmPassword" required
+                 placeholder="Повторите пароль">
+        </div>
+        <div id="password-match" class="form-text"></div>
+      </div>
+
+      <!-- Роль -->
+      <div class="mb-4">
+        <label class="form-label">Роль *</label>
+        <select class="form-select" th:field="*{role}" required>
+          <option value="">Выберите роль</option>
+          <option value="EMPLOYEE">Сотрудник</option>
+          <option value="ADMIN">Администратор</option>
+        </select>
+        <div class="form-text">Администраторы имеют расширенные права</div>
+      </div>
+
+      <!-- Кнопка регистрации -->
+      <div class="d-grid mb-3">
+        <button type="submit" class="btn btn-register" id="registerButton">
+          <i class="fas fa-user-plus me-2"></i>Зарегистрироваться
+        </button>
+      </div>
+    </form>
+
+    <!-- Ссылка на вход -->
+    <div class="login-link">
+      Уже есть аккаунт?
+      <a th:href="@{/login}">Войти в систему</a>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Проверка силы пароля
+  document.getElementById('password').addEventListener('input', function() {
+      const password = this.value;
+      const bar = document.getElementById('password-strength-bar');
+      const text = document.getElementById('password-strength-text');
+
+      let strength = 0;
+      let width = 0;
+      let color = 'danger';
+      let message = 'Слабый';
+
+      if (password.length >= 6) strength++;
+      if (password.length >= 8) strength++;
+      if (/[A-Z]/.test(password)) strength++;
+      if (/[0-9]/.test(password)) strength++;
+      if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+      switch(strength) {
+          case 0: case 1:
+              width = 25; color = 'danger'; message = 'Слабый';
+              break;
+          case 2: case 3:
+              width = 50; color = 'warning'; message = 'Средний';
+              break;
+          case 4:
+              width = 75; color = 'info'; message = 'Хороший';
+              break;
+          case 5:
+              width = 100; color = 'success'; message = 'Отличный';
+              break;
+      }
+
+      bar.style.width = width + '%';
+      bar.className = 'progress-bar bg-' + color;
+      text.textContent = message + ' пароль';
+      text.className = 'password-strength text-' + color;
+
+      checkPasswordMatch();
+  });
+
+  // Проверка совпадения паролей
+  document.getElementById('confirmPassword').addEventListener('input', checkPasswordMatch);
+
+  function checkPasswordMatch() {
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const matchDiv = document.getElementById('password-match');
+      const button = document.getElementById('registerButton');
+
+      if (!confirmPassword) {
+          matchDiv.textContent = '';
+          matchDiv.className = 'form-text';
+          button.disabled = false;
+          return;
+      }
+
+      if (password === confirmPassword) {
+          matchDiv.innerHTML = '<i class="fas fa-check text-success me-1"></i> Пароли совпадают';
+          matchDiv.className = 'form-text text-success';
+          button.disabled = false;
+      } else {
+          matchDiv.innerHTML = '<i class="fas fa-times text-danger me-1"></i> Пароли не совпадают';
+          matchDiv.className = 'form-text text-danger';
+          button.disabled = true;
+      }
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Информация о сотруднике</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+        .employee-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        .employee-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            position: relative;
+        }
+        .employee-avatar {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 48px;
+            color: #667eea;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+        }
+        .employee-name {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .employee-position {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        .employee-id {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        .employee-body {
+            padding: 30px;
+        }
+        .info-section {
+            margin-bottom: 25px;
+        }
+        .info-section h5 {
+            color: #495057;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .info-section h5 i {
+            margin-right: 10px;
+            color: #667eea;
+        }
+        .info-item {
+            display: flex;
+            margin-bottom: 12px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .info-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+        .info-label {
+            font-weight: 600;
+            min-width: 200px;
+            color: #495057;
+        }
+        .info-value {
+            color: #6c757d;
+        }
+        .badge-custom {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+        .btn-back {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-back:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+        .btn-edit {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-edit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+        .department-info {
+            background: linear-gradient(135deg, #17a2b8 0%, #20c997 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #dee2e6;
+        }
+        .status-active {
+            color: #28a745;
+            font-weight: 600;
+        }
+        .status-inactive {
+            color: #dc3545;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="mb-4">
+        <a th:href="@{/departments/}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Назад к списку отделов
+        </a>
+    </div>
+
+    <div class="employee-card" th:if="${employee}">
+        <div class="employee-header">
+            <span class="employee-id">ID: <span th:text="${employee.id}"></span></span>
+            <div class="employee-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <h1 class="employee-name text-center" th:text="${employee.name}"></h1>
+            <p class="employee-position text-center" th:if="${employee.post}">
+                <span th:text="${employee.post.post_name}"></span>
+            </p>
+        </div>
+
+        <!-- Тело карточки -->
+        <div class="employee-body">
+            <!-- Основная информация -->
+            <div class="info-section">
+                <h5><i class="fas fa-info-circle"></i> Основная информация</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="info-item">
+                            <span class="info-label">Полное имя:</span>
+                            <span class="info-value" th:text="${employee.name}"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="info-item">
+                            <span class="info-label">ID сотрудника:</span>
+                            <span class="info-value" th:text="${employee.id}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-section" th:if="${employee.post}">
+                <h5><i class="fas fa-briefcase"></i> Должность</h5>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="info-item">
+                            <span class="info-label">Название должности:</span>
+                            <span class="info-value badge-custom" th:text="${employee.post.post_name}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-section" th:if="${employee.department}">
+                <h5><i class="fas fa-building"></i> Кафедра</h5>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="info-item">
+                            <span class="info-label">Название кафедры:</span>
+                            <span class="info-value" th:text="${employee.department.departmentName}"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Дополнительная информация об отделе, если есть -->
+                <div th:if="${employee.department.departmentInformation}"
+                     class="department-info mt-3">
+                    <h6><i class="fas fa-info-circle me-2"></i>Информация об отделе:</h6>
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <strong>Руководитель:</strong>
+                            <p th:text="${employee.department.departmentInformation.headDepartment} ?: 'Не указан'"></p>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Заместитель:</strong>
+                            <p th:text="${employee.department.departmentInformation.deputyHeadDepartment} ?: 'Не указан'"></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <strong>Описание отдела:</strong>
+                            <p th:text="${employee.department.departmentInformation.departmentInformation} ?: 'Описание отсутствует'"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Информация о пользователе (аккаунт) -->
+            <div class="info-section" th:if="${employee.user}">
+                <h5><i class="fas fa-user-circle"></i> Учетная запись</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="info-item">
+                            <span class="info-label">Email:</span>
+                            <span class="info-value" th:text="${employee.user.email}"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="info-item">
+                            <span class="info-label">Роль:</span>
+                            <span class="info-value badge-custom" th:text="${employee.user.role}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="info-item">
+                            <span class="info-label">Статус аккаунта:</span>
+                            <span class="info-value">
+                                    <span th:if="${employee.user.enabled}" class="status-active">
+                                        <i class="fas fa-check-circle me-1"></i>Активен
+                                    </span>
+                                    <span th:unless="${employee.user.enabled}" class="status-inactive">
+                                        <i class="fas fa-times-circle me-1"></i>Неактивен
+                                    </span>
+                                </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Если нет пользователя -->
+            <div class="info-section" th:unless="${employee.user}">
+                <h5><i class="fas fa-user-circle"></i> Учетная запись</h5>
+                <div class="empty-state">
+                    <i class="fas fa-user-slash"></i>
+                    <p>У этого сотрудника нет учетной записи в системе</p>
+                </div>
+            </div>
+
+            <!-- Дата создания/обновления (если есть такие поля в сущности) -->
+            <div class="info-section" th:if="${employee.createdDate or employee.updatedDate}">
+                <h5><i class="fas fa-history"></i> Системная информация</h5>
+                <div class="row">
+                    <div class="col-md-6" th:if="${employee.createdDate}">
+                        <div class="info-item">
+                            <span class="info-label">Дата создания:</span>
+                            <span class="info-value" th:text="${#dates.format(employee.createdDate, 'dd.MM.yyyy HH:mm')}"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6" th:if="${employee.updatedDate}">
+                        <div class="info-item">
+                            <span class="info-label">Дата обновления:</span>
+                            <span class="info-value" th:text="${#dates.format(employee.updatedDate, 'dd.MM.yyyy HH:mm')}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Кнопки действий -->
+            <div class="action-buttons">
+                <a th:href="@{/departments/}" class="btn-back">
+                    <i class="fas fa-arrow-left me-2"></i>Назад
+                </a>
+                <a th:href="@{/employees/edit/{id}(id=${employee.id})}" class="btn-edit">
+                    <i class="fas fa-edit me-2"></i>Редактировать
+                </a>
+                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                    <i class="fas fa-trash me-2"></i>Удалить
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Если сотрудник не найден -->
+    <div th:unless="${employee}" class="employee-card">
+        <div class="empty-state">
+            <i class="fas fa-user-times"></i>
+            <h4>Сотрудник не найден</h4>
+            <p>Запрошенный сотрудник не существует или был удален</p>
+            <a th:href="@{/departments/}" class="btn btn-primary mt-3">
+                <i class="fas fa-arrow-left me-2"></i>Вернуться к списку отделов
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно подтверждения удаления -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Подтверждение удаления</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Вы уверены, что хотите удалить сотрудника <strong th:text="${employee?.name}"></strong>?</p>
+                <p class="text-danger"><i class="fas fa-exclamation-triangle me-2"></i>Это действие нельзя отменить!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                <form th:action="@{/employees/delete/{id}(id=${employee.id})}" method="post" style="display: inline;">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button type="submit" class="btn btn-danger">Удалить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Автоматическое скрытие сообщений через 5 секунд
+    document.addEventListener('DOMContentLoaded', function() {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                alert.style.transition = 'opacity 0.5s';
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 500);
+            }, 5000);
+        });
+    });
+</script>
+</body>
+</html>
