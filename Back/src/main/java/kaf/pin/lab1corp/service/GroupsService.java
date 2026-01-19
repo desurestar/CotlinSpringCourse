@@ -59,6 +59,6 @@ public class GroupsService {
     }
 
     public List<Groups> searchGroups(String searchTerm) {
-        return groupsRepository.findByGroup_nameContainsIgnoreCase(searchTerm);
+        return groupsRepository.findByGroupNameContainingIgnoreCase(searchTerm);
     }
 }
