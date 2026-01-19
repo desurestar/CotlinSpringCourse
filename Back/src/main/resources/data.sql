@@ -12,19 +12,19 @@ INSERT INTO post (post_name) VALUES
 
 INSERT INTO users (email, password, role, enabled) VALUES
 ('john.doe@company.com', 'password123', 'EMPLOYEE', true),
-('jane.smith@company.com', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVbDsq', 'EMPLOYEE', true),
-('mike.johnson@company.com', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVbDsq', 'EMPLOYEE', true),
-('sarah.wilson@company.com', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVbDsq', 'ADMIN', true),
-('robert.brown@company.com', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVbDsq', 'ADMIN', true),
-('emily.davis@company.com', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVbDsq', 'EMPLOYEE', true),
-('admin@institute.ru', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVbDsq', 'ADMIN', true),
-('manager@institute.ru', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVbDsq', 'EMPLOYEE', true),
-('employee@institute.ru', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVbDsq', 'EMPLOYEE', true),
-('student1@institute.ru', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVbDsq', 'STUDENT', true),
-('student2@institute.ru', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVbDsq', 'STUDENT', true),
-('student3@institute.ru', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVbDsq', 'STUDENT', true),
-('student4@institute.ru', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVbDsq', 'STUDENT', true),
-('student5@institute.ru', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVbDsq', 'STUDENT', true);
+('jane.smith@company.com', 'password123', 'EMPLOYEE', true),
+('mike.johnson@company.com', 'password123', 'EMPLOYEE', true),
+('sarah.wilson@company.com', 'password123', 'ADMIN', true),
+('robert.brown@company.com', 'password123', 'ADMIN', true),
+('emily.davis@company.com', 'password123', 'EMPLOYEE', true),
+('admin@institute.ru', 'password123', 'ADMIN', true),
+('manager@institute.ru', 'password123', 'EMPLOYEE', true),
+('employee@institute.ru', 'password123', 'EMPLOYEE', true),
+('student1@institute.ru', 'password123', 'STUDENT', true),
+('student2@institute.ru', 'password123', 'STUDENT', true),
+('student3@institute.ru', 'password123', 'STUDENT', true),
+('student4@institute.ru', 'password123', 'STUDENT', true),
+('student5@institute.ru', 'password123', 'STUDENT', true);
 
 INSERT INTO groups (group_name, department_id) VALUES
 ('PIN-122', 1),
