@@ -1,80 +1,71 @@
-/*
 package kaf.pin.lab1corp.service;
 
 import kaf.pin.lab1corp.entity.Students;
+import kaf.pin.lab1corp.entity.Users;
 import kaf.pin.lab1corp.repository.StudentsRepository;
+import kaf.pin.lab1corp.repository.UsersRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
+import java.util.Optional;
 
 @Service
+@Transactional
 public class StudentsService {
+
     private final StudentsRepository studentsRepository;
+    private final UsersRepository usersRepository;
 
-    public StudentsService(StudentsRepository studentsRepository) {
+    @Autowired
+    public StudentsService(StudentsRepository studentsRepository, UsersRepository usersRepository) {
         this.studentsRepository = studentsRepository;
+        this.usersRepository = usersRepository;
     }
-
 
     public List<Students> getAllStudents() {
-        return studentsRepository.findAll();
+        return (List<Students>) studentsRepository.findAll();
     }
 
-
-    public Students getStudentById(Long id) {
+    public Optional<Students> getStudentById(Long id) {
         return studentsRepository.findById(id);
     }
 
-
-    @Transactional
-    public Students createStudent(Students student) {
-        validateStudent(student);
-        studentsRepository.save(student);
-        return student;
-    }
-
-
-    @Transactional
-    public Students updateStudent(Long id, Students student) {
-        Students existingStudent = studentsRepository.findById(id);
-        if (existingStudent == null) {
-            throw new IllegalArgumentException("Студент с ID " + id + " не найден");
+    public Students saveStudent(Students student) {
+        if (student.getUser() != null && student.getUser().getId() == null) {
+            Users savedUser = usersRepository.save(student.getUser());
+            student.setUser(savedUser);
         }
-
-        student.setId(id);
-        validateStudent(student);
-        studentsRepository.update(student);
-
-        return student;
+        return studentsRepository.save(student);
     }
 
     @Transactional
-    public boolean deleteStudent(Long id) {
-        Students student = studentsRepository.findById(id);
-        if (student == null) {
+    public boolean safeDeleteStudent(Long studentId) {
+        try {
+            Optional<Students> student = studentsRepository.findById(studentId);
+            if (student.isPresent()) {
+                Students std = student.get();
+
+                studentsRepository.delete(std);
+
+                if (std.getUser() != null) {
+                    usersRepository.delete(std.getUser());
+                }
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
-
-        studentsRepository.deleteById(id);
-        return true;
     }
 
     public List<Students> getStudentsByGroupId(Long groupId) {
-        return studentsRepository.findByGroupId(groupId);
+        return studentsRepository.findByGroupsId(groupId);
     }
 
-    private void validateStudent(Students student) {
-        if (student.getName() == null || student.getName().trim().isEmpty()) {
-            throw new IllegalArgumentException("Имя студента не может быть пустым");
-        }
-
-        if (student.getName().length() > 255) {
-            throw new IllegalArgumentException("Имя студента слишком длинное");
-        }
-
-        if (student.getUserId() != null && student.getUserId() <= 0) {
-            throw new IllegalArgumentException("Некорректный user_id");
-        }
+    public List<Students> searchStudents(String searchTerm) {
+        return studentsRepository.findByNameContainsIgnoreCase(searchTerm);
     }
-
-}*/
+}
