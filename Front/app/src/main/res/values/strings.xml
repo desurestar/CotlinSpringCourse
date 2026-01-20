@@ -58,4 +58,20 @@
     <string name="role_student">STUDENT</string>
     <string name="role_employee">EMPLOYEE</string>
     <string name="role_admin">ADMIN</string>
+    
+    <!-- Articles -->
+    <string name="articles">Статьи</string>
+    <string name="my_articles">Мои статьи</string>
+    <string name="create_article">Создать статью</string>
+    <string name="article_title">Название статьи</string>
+    <string name="article_description">Описание</string>
+    <string name="article_link">Ссылка на источник</string>
+    <string name="publication_date">Дата публикации</string>
+    <string name="coauthors">Соавторы</string>
+    <string name="select_coauthors">Выберите соавторов</string>
+    <string name="no_articles">Нет статей</string>
+    <string name="article_created">Статья создана</string>
+    <string name="article_deleted">Статья удалена</string>
+    <string name="error_create_article">Ошибка создания статьи</string>
+    <string name="error_delete_article">Ошибка удаления статьи</string>
 </resources>

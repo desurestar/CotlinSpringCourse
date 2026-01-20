@@ -1,5 +1,6 @@
 package kaf.pin.lab1corp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 
@@ -20,6 +21,7 @@ public class DepartmentInformation {
 
     @OneToOne
     @JoinColumn(name = "department_id")
+    @JsonIgnore
     private Departments department;
 
     public Long getId() {

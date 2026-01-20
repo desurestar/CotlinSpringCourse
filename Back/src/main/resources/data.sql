@@ -57,3 +57,18 @@ INSERT INTO departments_information (head_department, deputy_head_department, de
 ('Mike Johnson', 'Senior Accountant', 'Department PMI', 3),
 ('Robert Brown', 'Marketing Assistant', 'Department IB', 4),
 ('Emily Davis', 'Senior Researcher', 'Department RT', 5);
+
+-- Статьи для тестирования
+INSERT INTO articles (title, description, external_link, publication_date, main_author_id) VALUES
+('Искусственный интеллект в образовании', 'Исследование применения AI технологий в современном образовательном процессе', 'https://journal.example.com/ai-education', '2024-01-15', 1),
+('Методы машинного обучения', 'Обзор современных подходов к машинному обучению и их практическое применение', 'https://journal.example.com/ml-methods', '2024-02-20', 1),
+('Кибербезопасность в образовании', 'Анализ угроз информационной безопасности в образовательных учреждениях', 'https://journal.example.com/cybersecurity', '2024-03-10', 2),
+('Разработка мобильных приложений', 'Современные подходы к созданию кроссплатформенных мобильных приложений', 'https://journal.example.com/mobile-dev', '2024-01-25', 3);
+
+-- Соавторы для статей
+INSERT INTO article_coauthors (article_id, coauthor_id) VALUES
+(1, 2),  -- Статья 1: соавтор employee 2
+(1, 3),  -- Статья 1: соавтор employee 3
+(2, 3),  -- Статья 2: соавтор employee 3
+(3, 1),  -- Статья 3: соавтор employee 1
+(4, 2);  -- Статья 4: соавтор employee 2

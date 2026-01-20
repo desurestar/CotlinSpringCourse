@@ -3,10 +3,12 @@ package kaf.pin.lab1corp.controller;
 import jakarta.validation.Valid;
 import kaf.pin.lab1corp.DTO.EmployeeUpdateDTO;
 import kaf.pin.lab1corp.DTO.EmployesCreateDTO;
+import kaf.pin.lab1corp.entity.Article;
 import kaf.pin.lab1corp.entity.Departments;
 import kaf.pin.lab1corp.entity.Employes;
 import kaf.pin.lab1corp.entity.Post;
 import kaf.pin.lab1corp.entity.Users;
+import kaf.pin.lab1corp.service.ArticleService;
 import kaf.pin.lab1corp.service.DepartmentService;
 import kaf.pin.lab1corp.service.EmployeeService;
 import kaf.pin.lab1corp.service.PostService;
@@ -28,13 +30,15 @@ public class EmployeeController {
     private final DepartmentService departmentService;
     private final PostService postService;
     private final UserService userService;
+    private final ArticleService articleService;
 
     @Autowired
-    public EmployeeController(EmployeeService employeeService, DepartmentService departmentService, PostService postService, UserService userService) {
+    public EmployeeController(EmployeeService employeeService, DepartmentService departmentService, PostService postService, UserService userService, ArticleService articleService) {
         this.employeeService = employeeService;
         this.departmentService = departmentService;
         this.postService = postService;
         this.userService = userService;
+        this.articleService = articleService;
     }
 
     @GetMapping("/info/{id}")
@@ -43,9 +47,14 @@ public class EmployeeController {
         if (employee.isPresent()) {
             List<Departments> departments = departmentService.getAllDepartments();
             List<Post> posts = postService.getAllPosts();
+            List<Employes> allEmployees = employeeService.getAllEmployees();
+            List<Article> articles = articleService.getArticlesByEmployee(id);
+            
             model.addAttribute("employee", employee.get());
             model.addAttribute("posts", posts);
             model.addAttribute("departments", departments);
+            model.addAttribute("allEmployees", allEmployees);
+            model.addAttribute("articles", articles);
             return "employee-detales";
         }
         return "redirect:/departments/";
