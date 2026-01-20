@@ -69,4 +69,23 @@ interface ApiService {
     
     @GET("api/students/{id}")
     suspend fun getStudentById(@Path("id") id: Long): Student
+    
+    // Articles
+    @GET("api/articles")
+    suspend fun getAllArticles(): List<Article>
+    
+    @GET("api/articles/{id}")
+    suspend fun getArticleById(@Path("id") id: Long): Article
+    
+    @GET("api/articles/employee/{employeeId}")
+    suspend fun getArticlesByEmployee(@Path("employeeId") employeeId: Long): List<Article>
+    
+    @POST("api/articles")
+    suspend fun createArticle(@Body request: ArticleCreateRequest): Article
+    
+    @PUT("api/articles/{id}")
+    suspend fun updateArticle(@Path("id") id: Long, @Body request: ArticleCreateRequest): Article
+    
+    @DELETE("api/articles/{id}")
+    suspend fun deleteArticle(@Path("id") id: Long): retrofit2.Response<Unit>
 }

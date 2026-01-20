@@ -1,0 +1,58 @@
+package com.example.front.data.repository
+
+import com.example.front.data.api.ApiService
+import com.example.front.data.model.Article
+import com.example.front.data.model.ArticleCreateRequest
+import com.example.front.util.Resource
+
+class ArticleRepository(private val apiService: ApiService) {
+    
+    suspend fun getAllArticles(): Resource<List<Article>> {
+        return try {
+            val response = apiService.getAllArticles()
+            Resource.Success(response)
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "Ошибка загрузки статей")
+        }
+    }
+    
+    suspend fun getArticlesByEmployee(employeeId: Long): Resource<List<Article>> {
+        return try {
+            val response = apiService.getArticlesByEmployee(employeeId)
+            Resource.Success(response)
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "Ошибка загрузки статей")
+        }
+    }
+    
+    suspend fun createArticle(request: ArticleCreateRequest): Resource<Article> {
+        return try {
+            val response = apiService.createArticle(request)
+            Resource.Success(response)
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "Ошибка создания статьи")
+        }
+    }
+    
+    suspend fun updateArticle(id: Long, request: ArticleCreateRequest): Resource<Article> {
+        return try {
+            val response = apiService.updateArticle(id, request)
+            Resource.Success(response)
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "Ошибка обновления статьи")
+        }
+    }
+    
+    suspend fun deleteArticle(id: Long): Resource<Unit> {
+        return try {
+            val response = apiService.deleteArticle(id)
+            if (response.isSuccessful) {
+                Resource.Success(Unit)
+            } else {
+                Resource.Error("Не удалось удалить статью")
+            }
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "Ошибка удаления статьи")
+        }
+    }
+}

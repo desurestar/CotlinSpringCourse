@@ -290,6 +290,54 @@
                 </div>
             </div>
 
+            <!-- Научные статьи -->
+            <div class="info-section">
+                <h5><i class="fas fa-file-alt"></i> Научные статьи</h5>
+                <div th:if="${articles == null or articles.isEmpty()}">
+                    <div class="empty-state">
+                        <i class="fas fa-book-open"></i>
+                        <p>Нет опубликованных статей</p>
+                    </div>
+                </div>
+                <div th:unless="${articles == null or articles.isEmpty()}">
+                    <div class="list-group mb-3">
+                        <div th:each="article : ${articles}" class="list-group-item">
+                            <h6 class="mb-2" th:text="${article.title}">Название статьи</h6>
+                            <p class="mb-2 text-muted" th:text="${article.description}">Описание</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar me-1"></i>
+                                    Опубликовано: 
+                                    <span th:if="${article.publicationDate}" 
+                                          th:text="${#temporals.format(article.publicationDate, 'dd.MM.yyyy')}"></span>
+                                    <span th:unless="${article.publicationDate}">Не указано</span>
+                                </small>
+                                <div>
+                                    <a th:if="${article.externalLink != null and !article.externalLink.isEmpty()}" 
+                                       th:href="${article.externalLink}" 
+                                       target="_blank" 
+                                       class="btn btn-sm btn-outline-primary me-2">
+                                        <i class="fas fa-external-link-alt"></i> Перейти
+                                    </a>
+                                </div>
+                            </div>
+                            <div th:if="${article.coauthors != null and !article.coauthors.isEmpty()}" class="mt-2">
+                                <small class="text-muted">
+                                    <i class="fas fa-users me-1"></i>
+                                    Соавторы: 
+                                    <span th:each="coauthor, iterStat : ${article.coauthors}">
+                                        <span th:text="${coauthor.name}"></span><span th:if="${!iterStat.last}">, </span>
+                                    </span>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#createArticleModal">
+                    <i class="fas fa-plus"></i> Создать статью
+                </button>
+            </div>
+
             <!-- Дата создания/обновления (если есть такие поля в сущности) -->
             <div class="info-section" th:if="${employee.createdDate or employee.updatedDate}">
                 <h5><i class="fas fa-history"></i> Системная информация</h5>
@@ -356,6 +404,71 @@
                     <button type="submit" class="btn btn-danger">Удалить</button>
                 </form>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно создания статьи -->
+<div class="modal fade" id="createArticleModal" tabindex="-1" aria-labelledby="createArticleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createArticleModalLabel">
+                    <i class="fas fa-file-alt me-2"></i>Создать новую статью
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form th:action="@{/articles/create}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <input type="hidden" name="mainAuthorId" th:value="${employee.id}"/>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="articleTitle" class="form-label">Название статьи *</label>
+                        <input type="text" class="form-control" id="articleTitle" name="title" 
+                               placeholder="Введите название статьи" required minlength="3" maxlength="255"/>
+                        <div class="form-text">Минимум 3 символа, максимум 255</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="articleDescription" class="form-label">Описание *</label>
+                        <textarea class="form-control" id="articleDescription" name="description" 
+                                  rows="4" placeholder="Введите описание статьи" required minlength="10"></textarea>
+                        <div class="form-text">Минимум 10 символов</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="articleLink" class="form-label">Ссылка на источник</label>
+                        <input type="url" class="form-control" id="articleLink" name="externalLink" 
+                               placeholder="https://example.com/article" maxlength="500"/>
+                        <div class="form-text">Опциональное поле. Максимум 500 символов</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="publicationDate" class="form-label">Дата публикации</label>
+                        <input type="date" class="form-control" id="publicationDate" name="publicationDate"/>
+                        <div class="form-text">Опциональное поле</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="coauthors" class="form-label">Соавторы</label>
+                        <select class="form-select" id="coauthors" name="coauthorIds" multiple size="5">
+                            <option th:each="emp : ${allEmployees}" 
+                                    th:value="${emp.id}" 
+                                    th:text="${emp.name}"
+                                    th:disabled="${emp.id == employee.id}">
+                            </option>
+                        </select>
+                        <div class="form-text">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Удерживайте Ctrl (Cmd на Mac) для выбора нескольких соавторов
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Отмена
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Создать
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
