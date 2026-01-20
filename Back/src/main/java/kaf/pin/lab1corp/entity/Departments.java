@@ -1,5 +1,6 @@
 package kaf.pin.lab1corp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 
@@ -17,10 +18,12 @@ public class Departments {
     private String departmentName;
 
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Employes> employesList;
     @OneToOne(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
     private DepartmentInformation departmentInformation;
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Groups> groupsList;
 
     public Long getId() {
