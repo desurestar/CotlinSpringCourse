@@ -38,3 +38,4 @@ data class TeamResearchWorkRequest(
     val startDate: String? = null,
     val endDate: String? = null
 )
+
