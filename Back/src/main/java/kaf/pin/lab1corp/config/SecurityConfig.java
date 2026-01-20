@@ -31,7 +31,7 @@ public class SecurityConfig {
                         
                         // API GET endpoints - public access
                         .requestMatchers(HttpMethod.GET, "/api/departments/**", "/api/employees/**",
-                                        "/api/groups/**", "/api/students/**", "/api/posts/**").permitAll()
+                                        "/api/groups/**", "/api/students/**", "/api/posts/**", "/api/articles/**").permitAll()
                         
                         // API POST/PUT endpoints - require ADMIN or EMPLOYEE role
                         .requestMatchers(HttpMethod.POST, "/api/**").hasAnyRole("ADMIN", "EMPLOYEE")
@@ -42,7 +42,7 @@ public class SecurityConfig {
                         
                         // Web endpoints
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/departments/**", "/employees/**").hasAnyRole("ADMIN", "EMPLOYEE")
+                        .requestMatchers("/departments/**", "/employees/**", "/employe/**", "/articles/**").hasAnyRole("ADMIN", "EMPLOYEE")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
