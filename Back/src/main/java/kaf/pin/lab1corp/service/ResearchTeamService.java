@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -160,7 +161,7 @@ public class ResearchTeamService {
 
     // CRUD для научных работ
     public TeamResearchWork createWork(Long teamId, String title, String description, 
-                                       String status, java.time.LocalDate startDate) {
+                                       String status, LocalDate startDate) {
         Optional<ResearchTeam> teamOpt = researchTeamRepository.findById(teamId);
         if (teamOpt.isEmpty()) {
             throw new ResourceNotFoundException("Research team not found with id: " + teamId);
@@ -193,7 +194,7 @@ public class ResearchTeamService {
     }
 
     public TeamResearchWork updateWork(Long id, String title, String description, 
-                                      String status, java.time.LocalDate startDate) {
+                                      String status, LocalDate startDate) {
         Optional<TeamResearchWork> workOpt = teamResearchWorkRepository.findById(id);
         if (workOpt.isEmpty()) {
             throw new ResourceNotFoundException("Research work not found with id: " + id);

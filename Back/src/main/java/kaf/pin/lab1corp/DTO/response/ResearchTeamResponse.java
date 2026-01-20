@@ -1,8 +1,5 @@
 package kaf.pin.lab1corp.DTO.response;
 
-import kaf.pin.lab1corp.DTO.TeamMemberDTO;
-import kaf.pin.lab1corp.DTO.TeamResearchWorkDTO;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
