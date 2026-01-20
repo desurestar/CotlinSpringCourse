@@ -330,7 +330,7 @@ public class ResearchTeamRestController {
     private StudentResponse convertToStudentResponse(Students student) {
         GroupResponse groupResponse = student.getGroups() != null
             ? new GroupResponse(student.getGroups().getId(), 
-                              student.getGroups().getGroup_name(), null)
+                              student.getGroups().getGroup_name(), null, null)
             : null;
             
         UserResponse userResponse = student.getUser() != null
