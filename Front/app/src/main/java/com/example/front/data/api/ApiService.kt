@@ -88,4 +88,49 @@ interface ApiService {
     
     @DELETE("api/articles/{id}")
     suspend fun deleteArticle(@Path("id") id: Long): retrofit2.Response<Unit>
+    
+    // Research Teams
+    @GET("api/research-teams")
+    suspend fun getResearchTeams(): List<ResearchTeam>
+    
+    @GET("api/research-teams/{id}")
+    suspend fun getResearchTeamById(@Path("id") id: Long): ResearchTeam
+    
+    @GET("api/research-teams/leader/{leaderId}")
+    suspend fun getTeamsByLeader(@Path("leaderId") leaderId: Long): List<ResearchTeam>
+    
+    @POST("api/research-teams")
+    suspend fun createResearchTeam(@Body request: ResearchTeamCreateRequest): ResearchTeam
+    
+    @PUT("api/research-teams/{id}")
+    suspend fun updateResearchTeam(@Path("id") id: Long, @Body request: ResearchTeamCreateRequest): ResearchTeam
+    
+    @DELETE("api/research-teams/{id}")
+    suspend fun deleteResearchTeam(@Path("id") id: Long): retrofit2.Response<Unit>
+    
+    // Team Members
+    @GET("api/research-teams/{teamId}/members")
+    suspend fun getTeamMembers(@Path("teamId") teamId: Long): List<TeamMember>
+    
+    @POST("api/research-teams/members/employee")
+    suspend fun addEmployeeToTeam(@Body request: TeamMemberRequest): TeamMember
+    
+    @POST("api/research-teams/members/student")
+    suspend fun addStudentToTeam(@Body request: TeamMemberRequest): TeamMember
+    
+    @DELETE("api/research-teams/members/{memberId}")
+    suspend fun removeMember(@Path("memberId") memberId: Long): retrofit2.Response<Unit>
+    
+    // Research Works
+    @GET("api/research-teams/{teamId}/works")
+    suspend fun getTeamWorks(@Path("teamId") teamId: Long): List<TeamResearchWork>
+    
+    @POST("api/research-teams/works")
+    suspend fun createWork(@Body request: TeamResearchWorkRequest): TeamResearchWork
+    
+    @PUT("api/research-teams/works/{id}")
+    suspend fun updateWork(@Path("id") id: Long, @Body request: TeamResearchWorkRequest): TeamResearchWork
+    
+    @DELETE("api/research-teams/works/{id}")
+    suspend fun deleteWork(@Path("id") id: Long): retrofit2.Response<Unit>
 }

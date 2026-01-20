@@ -34,4 +34,22 @@
             app:argType="long" />
     </fragment>
 
+    <fragment
+        android:id="@+id/researchTeamListFragment"
+        android:name="com.example.front.ui.researchteam.ResearchTeamListFragment"
+        android:label="@string/research_teams">
+        <action
+            android:id="@+id/action_teamList_to_teamDetail"
+            app:destination="@id/researchTeamDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/researchTeamDetailFragment"
+        android:name="com.example.front.ui.researchteam.ResearchTeamDetailFragment"
+        android:label="Детали коллектива">
+        <argument
+            android:name="teamId"
+            app:argType="long" />
+    </fragment>
+
 </navigation>

@@ -74,4 +74,17 @@
     <string name="article_deleted">Статья удалена</string>
     <string name="error_create_article">Ошибка создания статьи</string>
     <string name="error_delete_article">Ошибка удаления статьи</string>
+    
+    <!-- Research Teams -->
+    <string name="research_teams">Научные коллективы</string>
+    <string name="team_name">Название коллектива</string>
+    <string name="team_description">Описание</string>
+    <string name="team_leader">Лидер</string>
+    <string name="team_members">Участники</string>
+    <string name="research_works">Научные работы</string>
+    <string name="work_title">Название работы</string>
+    <string name="work_status">Статус</string>
+    <string name="add_member">Добавить участника</string>
+    <string name="add_work">Добавить работу</string>
+    <string name="create_team">Создать коллектив</string>
 </resources>

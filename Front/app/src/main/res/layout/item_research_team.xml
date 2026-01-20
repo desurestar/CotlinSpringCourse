@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="12dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <View
+            android:id="@+id/iconBackground"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@drawable/gradient_circle"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/iconText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🔬"
+            android:textSize="32sp"
+            app:layout_constraintTop_toTopOf="@id/iconBackground"
+            app:layout_constraintBottom_toBottomOf="@id/iconBackground"
+            app:layout_constraintStart_toStartOf="@id/iconBackground"
+            app:layout_constraintEnd_toEndOf="@id/iconBackground"/>
+
+        <TextView
+            android:id="@+id/tvTeamName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            tools:text="Лаборатория AI"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:maxLines="2"
+            android:ellipsize="end"
+            app:layout_constraintTop_toTopOf="@id/iconBackground"
+            app:layout_constraintStart_toEndOf="@id/iconBackground"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="16dp"/>
+
+        <TextView
+            android:id="@+id/tvLeader"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            tools:text="👤 Лидер: Иванов И.И."
+            android:textSize="14sp"
+            android:textColor="@color/text_secondary"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintTop_toBottomOf="@id/tvTeamName"
+            app:layout_constraintStart_toEndOf="@id/iconBackground"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/tvMembersCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="👥 5 участников"
+            android:textSize="12sp"
+            android:textColor="@color/text_secondary"
+            app:layout_constraintTop_toBottomOf="@id/iconBackground"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="12dp"/>
+
+        <TextView
+            android:id="@+id/tvWorksCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="📝 3 работы"
+            android:textSize="12sp"
+            android:textColor="@color/text_secondary"
+            app:layout_constraintTop_toBottomOf="@id/iconBackground"
+            app:layout_constraintStart_toEndOf="@id/tvMembersCount"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
