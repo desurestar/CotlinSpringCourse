@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.front.databinding.FragmentResearchTeamListBinding
+import com.example.front.util.GuestAccessHelper
 import com.example.front.util.Resource
 import com.example.front.util.gone
 import com.example.front.util.showToast
@@ -32,6 +33,13 @@ class ResearchTeamListFragment : Fragment() {
         
         viewModel = ViewModelProvider(this, ResearchTeamViewModelFactory(requireContext()))[ResearchTeamViewModel::class.java]
         
+        // Hide FAB for guest users
+        if (GuestAccessHelper.isGuestMode(requireContext())) {
+            binding.fabAdd.gone()
+        } else {
+            binding.fabAdd.visible()
+        }
+        
         setupRecyclerView()
         setupListeners()
         setupObservers()
@@ -50,8 +58,14 @@ class ResearchTeamListFragment : Fragment() {
     
     private fun setupListeners() {
         binding.fabAdd.setOnClickListener {
-            // Show create team dialog
-            showToast("Создание коллектива - в разработке")
+            GuestAccessHelper.checkAccessAndExecute(
+                requireContext(),
+                action = {
+                    // Show create team dialog
+                    showToast(getString(R.string.create_team))
+                },
+                deniedMessage = getString(R.string.create_teams_auth_required)
+            )
         }
     }
     

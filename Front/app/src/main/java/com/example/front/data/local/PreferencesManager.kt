@@ -12,6 +12,7 @@ class PreferencesManager(context: Context) {
         private const val KEY_USER_ID = "user_id"
         private const val KEY_EMAIL = "email"
         private const val KEY_ROLE = "role"
+        private const val KEY_IS_GUEST = "is_guest"
     }
     
     fun saveToken(token: String) {
@@ -27,8 +28,19 @@ class PreferencesManager(context: Context) {
             putLong(KEY_USER_ID, userId)
             putString(KEY_EMAIL, email)
             putString(KEY_ROLE, role)
+            putBoolean(KEY_IS_GUEST, false)
             apply()
         }
+    }
+    
+    fun setGuestMode(isGuest: Boolean) {
+        sharedPreferences.edit()
+            .putBoolean(KEY_IS_GUEST, isGuest)
+            .apply()
+    }
+    
+    fun isGuestMode(): Boolean {
+        return sharedPreferences.getBoolean(KEY_IS_GUEST, false)
     }
     
     fun getUserId(): Long {
@@ -48,6 +60,10 @@ class PreferencesManager(context: Context) {
     }
     
     fun isLoggedIn(): Boolean {
-        return getToken() != null
+        return getToken() != null || isGuestMode()
+    }
+    
+    fun isAuthenticated(): Boolean {
+        return getToken() != null && !isGuestMode()
     }
 }

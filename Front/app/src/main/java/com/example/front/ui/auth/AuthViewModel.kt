@@ -18,6 +18,9 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
     private val _registerResult = MutableLiveData<Resource<User>>()
     val registerResult: LiveData<Resource<User>> = _registerResult
     
+    private val _guestLoginResult = MutableLiveData<Boolean>()
+    val guestLoginResult: LiveData<Boolean> = _guestLoginResult
+    
     fun login(email: String, password: String) {
         viewModelScope.launch {
             _loginResult.value = Resource.Loading()
@@ -33,6 +36,19 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
     }
     
     fun isLoggedIn(): Boolean = repository.isLoggedIn()
+    
+    fun loginAsGuest() {
+        repository.loginAsGuest()
+        _guestLoginResult.value = true
+    }
+    
+    fun isGuestMode(): Boolean {
+        return repository.isGuestMode()
+    }
+    
+    fun isAuthenticated(): Boolean {
+        return repository.isAuthenticated()
+    }
     
     fun logout() {
         repository.logout()

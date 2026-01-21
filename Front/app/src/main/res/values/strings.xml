@@ -11,6 +11,19 @@
     <string name="register_button">Зарегистрироваться</string>
     <string name="no_account">Нет аккаунта? Зарегистрироваться</string>
     <string name="have_account">Есть аккаунт? Войти</string>
+    <string name="login_as_guest">Войти как гость</string>
+    <string name="guest_mode">Режим гостя</string>
+    <string name="login_required_title">Требуется авторизация</string>
+    <string name="login_required_message">Эта функция доступна только зарегистрированным пользователям</string>
+    <string name="guest_access_denied">Недоступно в режиме гостя</string>
+    <string name="switch_to_account">Войти в аккаунт</string>
+    <string name="action_login">Войти</string>
+    <string name="divider_or">или</string>
+    <string name="logout_title">Выход</string>
+    <string name="logout_message">Вы уверены, что хотите выйти?</string>
+    <string name="action_yes">Да</string>
+    <string name="action_no">Нет</string>
+    <string name="create_teams_auth_required">Создание коллективов доступно только авторизованным пользователям</string>
     
     <!-- Validation Messages -->
     <string name="error_empty_email">Введите email</string>
