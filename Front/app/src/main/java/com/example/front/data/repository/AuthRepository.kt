@@ -45,7 +45,19 @@ class AuthRepository(
         preferencesManager.clearAuth()
     }
     
+    fun loginAsGuest() {
+        preferencesManager.setGuestMode(true)
+    }
+    
     fun isLoggedIn(): Boolean {
         return preferencesManager.isLoggedIn()
+    }
+    
+    fun isGuestMode(): Boolean {
+        return preferencesManager.isGuestMode()
+    }
+    
+    fun isAuthenticated(): Boolean {
+        return preferencesManager.isAuthenticated()
     }
 }
