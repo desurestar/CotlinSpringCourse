@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         
         // Show guest status in toolbar
         if (PreferencesManager(this).isGuestMode()) {
-            supportActionBar?.subtitle = "Режим гостя"
+            supportActionBar?.subtitle = getString(R.string.guest_mode)
         }
     }
     
@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         
         // Change icon/text for guest
         if (PreferencesManager(this).isGuestMode()) {
-            menu.findItem(R.id.action_logout)?.title = "Войти"
+            menu.findItem(R.id.action_logout)?.title = getString(R.string.action_login)
         }
         
         return true
@@ -79,13 +79,13 @@ class MainActivity : AppCompatActivity() {
     
     private fun showLogoutDialog() {
         androidx.appcompat.app.AlertDialog.Builder(this)
-            .setTitle("Выход")
-            .setMessage("Вы уверены, что хотите выйти?")
-            .setPositiveButton("Да") { _, _ ->
+            .setTitle(getString(R.string.logout_title))
+            .setMessage(getString(R.string.logout_message))
+            .setPositiveButton(getString(R.string.action_yes)) { _, _ ->
                 authViewModel.logout()
                 navigateToLogin()
             }
-            .setNegativeButton("Нет", null)
+            .setNegativeButton(getString(R.string.action_no), null)
             .show()
     }
     

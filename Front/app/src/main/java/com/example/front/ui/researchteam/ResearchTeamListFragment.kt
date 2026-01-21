@@ -62,9 +62,9 @@ class ResearchTeamListFragment : Fragment() {
                 requireContext(),
                 action = {
                     // Show create team dialog
-                    showToast("Создание коллектива - в разработке")
+                    showToast(getString(R.string.create_team))
                 },
-                deniedMessage = "Создание коллективов доступно только авторизованным пользователям"
+                deniedMessage = getString(R.string.create_teams_auth_required)
             )
         }
     }
