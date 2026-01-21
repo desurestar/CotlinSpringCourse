@@ -33,6 +33,11 @@ class MainActivity : AppCompatActivity() {
     
     private fun setupToolbar() {
         setSupportActionBar(binding.toolbar)
+        
+        // Show guest status in toolbar
+        if (PreferencesManager(this).isGuestMode()) {
+            supportActionBar?.subtitle = "Режим гостя"
+        }
     }
     
     private fun setupNavigation() {
@@ -46,20 +51,48 @@ class MainActivity : AppCompatActivity() {
     
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
+        
+        // Change icon/text for guest
+        if (PreferencesManager(this).isGuestMode()) {
+            menu.findItem(R.id.action_logout)?.title = "Войти"
+        }
+        
         return true
     }
     
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_logout -> {
-                authViewModel.logout()
-                val intent = Intent(this, LoginActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-                finish()
+                if (PreferencesManager(this).isGuestMode()) {
+                    // For guest - go to login
+                    authViewModel.logout()
+                    navigateToLogin()
+                } else {
+                    // For authenticated - show logout confirmation
+                    showLogoutDialog()
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+    
+    private fun showLogoutDialog() {
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Выход")
+            .setMessage("Вы уверены, что хотите выйти?")
+            .setPositiveButton("Да") { _, _ ->
+                authViewModel.logout()
+                navigateToLogin()
+            }
+            .setNegativeButton("Нет", null)
+            .show()
+    }
+    
+    private fun navigateToLogin() {
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
     }
 }

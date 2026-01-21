@@ -43,18 +43,28 @@ class LoginActivity : AppCompatActivity() {
                 is Resource.Loading -> {
                     binding.progressBar.visible()
                     binding.btnLogin.isEnabled = false
+                    binding.btnGuestLogin.isEnabled = false
                 }
                 is Resource.Success -> {
                     binding.progressBar.gone()
                     binding.btnLogin.isEnabled = true
+                    binding.btnGuestLogin.isEnabled = true
                     Toast.makeText(this, "Успешный вход!", Toast.LENGTH_SHORT).show()
                     navigateToMain()
                 }
                 is Resource.Error -> {
                     binding.progressBar.gone()
                     binding.btnLogin.isEnabled = true
+                    binding.btnGuestLogin.isEnabled = true
                     Toast.makeText(this, resource.message ?: "Ошибка входа", Toast.LENGTH_SHORT).show()
                 }
+            }
+        }
+        
+        viewModel.guestLoginResult.observe(this) { success ->
+            if (success) {
+                Toast.makeText(this, "Вход как гость", Toast.LENGTH_SHORT).show()
+                navigateToMain()
             }
         }
     }
@@ -67,6 +77,10 @@ class LoginActivity : AppCompatActivity() {
             if (validateInput(email, password)) {
                 viewModel.login(email, password)
             }
+        }
+        
+        binding.btnGuestLogin.setOnClickListener {
+            viewModel.loginAsGuest()
         }
         
         binding.tvRegister.setOnClickListener {
