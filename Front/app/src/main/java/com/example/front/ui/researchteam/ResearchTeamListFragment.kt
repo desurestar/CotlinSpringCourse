@@ -1,5 +1,6 @@
 package com.example.front.ui.researchteam
 
+import com.example.front.R
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
