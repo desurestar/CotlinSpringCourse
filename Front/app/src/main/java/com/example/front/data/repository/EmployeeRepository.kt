@@ -18,12 +18,7 @@ class EmployeeRepository(private val apiService: ApiService) {
     }
     
     suspend fun getEmployeesByDepartment(departmentId: Long): Resource<List<Employee>> {
-        return try {
-            val response = apiService.getEmployees(departmentId = departmentId)
-            Resource.Success(response)
-        } catch (e: Exception) {
-            Resource.Error(e.message ?: "Ошибка загрузки работников кафедры")
-        }
+        return getEmployees(departmentId = departmentId)
     }
     
     suspend fun getEmployeeById(id: Long): Resource<Employee> {

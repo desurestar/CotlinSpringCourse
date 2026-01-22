@@ -19,7 +19,7 @@ interface ApiService {
     suspend fun getDepartments(@Query("search") search: String? = null): List<Department>
     
     @GET("api/departments/{id}")
-    suspend fun getDepartmentById(@Path("id") id: Long): DepartmentDetail
+    suspend fun getDepartmentById(@Path("id") id: Long): Department
     
     @POST("api/departments")
     suspend fun createDepartment(@Body request: DepartmentRequest): Department

@@ -17,10 +17,14 @@ class DepartmentRepository(private val apiService: ApiService) {
         }
     }
     
+    @Deprecated("Backend API does not return employees in department detail")
     suspend fun getDepartmentById(id: Long): Resource<DepartmentDetail> {
         return try {
+            // Note: This endpoint actually returns Department, not DepartmentDetail
+            // Keeping for backwards compatibility but should not be used
             val response = apiService.getDepartmentById(id)
-            Resource.Success(response)
+            val detail = DepartmentDetail(response.id, response.departmentName, null)
+            Resource.Success(detail)
         } catch (e: Exception) {
             Resource.Error(e.message ?: "Ошибка загрузки кафедры")
         }
@@ -28,15 +32,10 @@ class DepartmentRepository(private val apiService: ApiService) {
     
     suspend fun getDepartmentBasicInfo(id: Long): Resource<Department> {
         return try {
-            val response = apiService.getDepartments()
-            val department = response.find { it.id == id }
-            if (department != null) {
-                Resource.Success(department)
-            } else {
-                Resource.Error("Кафедра не найдена")
-            }
+            val response = apiService.getDepartmentById(id)
+            Resource.Success(response)
         } catch (e: Exception) {
-            Resource.Error(e.message ?: "Ошибка загрузки кафедры")
+            Resource.Error(e.message ?: "Кафедра не найдена")
         }
     }
     
