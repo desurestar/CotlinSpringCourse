@@ -122,13 +122,13 @@
 
     </div>
     <div th:if="${departments.size() == 0}" class="alert alert-info text-center">
-        <i class="fas fa-info-circle me-2"></i>Список отделов пуст
+        <i class="fas fa-info-circle me-2"></i>Список кафедр пуст
     </div>
     <div th:each="department : ${departments}" class="department-card card mb-3">
         <div class="card-header">
             <a th:href="@{'/departments/' + ${department.id}}" class="department-link">
                 <div class="department-info">
-                    <span th:text="${department.departmentName}">Название отдела</span>
+                    <span th:text="${department.departmentName}">Название кафедры</span>
                     <span class="employee-count" th:text="|${#lists.size(department.employesList)} сотрудников|">0 сотрудников</span>
                 </div>
             </a>

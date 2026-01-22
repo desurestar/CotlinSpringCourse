@@ -46,6 +46,7 @@ class DepartmentDetailFragment : Fragment() {
         setupRecyclerView()
         setupObservers()
         
+        // Load department info and employees separately
         viewModel.loadDepartmentById(args.departmentId)
     }
     
@@ -61,34 +62,51 @@ class DepartmentDetailFragment : Fragment() {
     }
     
     private fun setupObservers() {
-        viewModel.departmentDetail.observe(viewLifecycleOwner) { resource ->
+        // Observe department info
+        viewModel.department.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+                    binding.progressBar.visible()
+                }
+                is Resource.Success -> {
+                    resource.data?.let { department ->
+                        binding.tvDepartmentName.text = department.departmentName
+                    }
+                }
+                is Resource.Error -> {
+                    binding.progressBar.gone()
+                    showToast(resource.message ?: "Ошибка загрузки кафедры")
+                }
+            }
+        }
+        
+        // Observe department employees
+        viewModel.departmentEmployees.observe(viewLifecycleOwner) { resource ->
             when (resource) {
                 is Resource.Loading -> {
                     binding.progressBar.visible()
                 }
                 is Resource.Success -> {
                     binding.progressBar.gone()
-                    resource.data?.let { department ->
-                        binding.tvDepartmentName.text = department.departmentName
-                        binding.tvEmployeeCount.text = getString(
-                            R.string.employee_count,
-                            department.employees?.size ?: 0
-                        )
-                        
-                        val employees = department.employees ?: emptyList()
-                        if (employees.isEmpty()) {
-                            binding.tvEmptyState.visible()
-                            binding.rvEmployees.gone()
-                        } else {
-                            binding.tvEmptyState.gone()
-                            binding.rvEmployees.visible()
-                            employeeAdapter.submitList(employees)
-                        }
+                    val employees = resource.data ?: emptyList()
+                    
+                    binding.tvEmployeeCount.text = getString(
+                        R.string.employee_count,
+                        employees.size
+                    )
+                    
+                    if (employees.isEmpty()) {
+                        binding.tvEmptyState.visible()
+                        binding.rvEmployees.gone()
+                    } else {
+                        binding.tvEmptyState.gone()
+                        binding.rvEmployees.visible()
+                        employeeAdapter.submitList(employees)
                     }
                 }
                 is Resource.Error -> {
                     binding.progressBar.gone()
-                    showToast(resource.message ?: "Ошибка загрузки отдела")
+                    showToast(resource.message ?: "Ошибка загрузки работников")
                 }
             }
         }

@@ -17,6 +17,10 @@ class EmployeeRepository(private val apiService: ApiService) {
         }
     }
     
+    suspend fun getEmployeesByDepartment(departmentId: Long): Resource<List<Employee>> {
+        return getEmployees(departmentId = departmentId)
+    }
+    
     suspend fun getEmployeeById(id: Long): Resource<Employee> {
         return try {
             val response = apiService.getEmployeeById(id)

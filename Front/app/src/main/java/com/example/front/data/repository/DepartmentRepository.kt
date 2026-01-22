@@ -2,7 +2,6 @@ package com.example.front.data.repository
 
 import com.example.front.data.api.ApiService
 import com.example.front.data.model.Department
-import com.example.front.data.model.DepartmentDetail
 import com.example.front.data.model.DepartmentRequest
 import com.example.front.util.Resource
 
@@ -13,16 +12,16 @@ class DepartmentRepository(private val apiService: ApiService) {
             val response = apiService.getDepartments(search)
             Resource.Success(response)
         } catch (e: Exception) {
-            Resource.Error(e.message ?: "Ошибка загрузки отделов")
+            Resource.Error(e.message ?: "Ошибка загрузки кафедр")
         }
     }
     
-    suspend fun getDepartmentById(id: Long): Resource<DepartmentDetail> {
+    suspend fun getDepartmentBasicInfo(id: Long): Resource<Department> {
         return try {
             val response = apiService.getDepartmentById(id)
             Resource.Success(response)
         } catch (e: Exception) {
-            Resource.Error(e.message ?: "Ошибка загрузки отдела")
+            Resource.Error(e.message ?: "Кафедра не найдена")
         }
     }
     
@@ -31,7 +30,7 @@ class DepartmentRepository(private val apiService: ApiService) {
             val response = apiService.createDepartment(DepartmentRequest(name))
             Resource.Success(response)
         } catch (e: Exception) {
-            Resource.Error(e.message ?: "Ошибка создания отдела")
+            Resource.Error(e.message ?: "Ошибка создания кафедры")
         }
     }
     
@@ -40,7 +39,7 @@ class DepartmentRepository(private val apiService: ApiService) {
             val response = apiService.updateDepartment(id, DepartmentRequest(name))
             Resource.Success(response)
         } catch (e: Exception) {
-            Resource.Error(e.message ?: "Ошибка обновления отдела")
+            Resource.Error(e.message ?: "Ошибка обновления кафедры")
         }
     }
     
@@ -49,7 +48,7 @@ class DepartmentRepository(private val apiService: ApiService) {
             apiService.deleteDepartment(id)
             Resource.Success(Unit)
         } catch (e: Exception) {
-            Resource.Error(e.message ?: "Ошибка удаления отдела")
+            Resource.Error(e.message ?: "Ошибка удаления кафедры")
         }
     }
 }

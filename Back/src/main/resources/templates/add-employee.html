@@ -52,7 +52,7 @@
                     <div class="mb-3">
                         <label class="form-label">Кафедра *</label>
                         <select class="form-select" th:field="*{departmentId}" required>
-                            <option value="">Выберите отдел</option>
+                            <option value="">Выберите кафедру</option>
                             <option th:each="dept : ${departments}"
                                     th:value="${dept.id}"
                                     th:text="${dept.departmentName}">
