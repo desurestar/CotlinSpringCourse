@@ -164,7 +164,7 @@
 <div class="container">
     <div class="mb-4">
         <a th:href="@{/departments/}" class="btn btn-outline-secondary">
-            <i class="fas fa-arrow-left me-2"></i>Назад к списку отделов
+            <i class="fas fa-arrow-left me-2"></i>Назад к списку кафедр
         </a>
     </div>
 
@@ -224,10 +224,10 @@
                     </div>
                 </div>
 
-                <!-- Дополнительная информация об отделе, если есть -->
+                <!-- Дополнительная информация о кафедре, если есть -->
                 <div th:if="${employee.department.departmentInformation}"
                      class="department-info mt-3">
-                    <h6><i class="fas fa-info-circle me-2"></i>Информация об отделе:</h6>
+                    <h6><i class="fas fa-info-circle me-2"></i>Информация о кафедре:</h6>
                     <div class="row mt-2">
                         <div class="col-md-6">
                             <strong>Руководитель:</strong>
@@ -240,7 +240,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <strong>Описание отдела:</strong>
+                            <strong>Описание кафедры:</strong>
                             <p th:text="${employee.department.departmentInformation.departmentInformation} ?: 'Описание отсутствует'"></p>
                         </div>
                     </div>
@@ -379,7 +379,7 @@
             <h4>Сотрудник не найден</h4>
             <p>Запрошенный сотрудник не существует или был удален</p>
             <a th:href="@{/departments/}" class="btn btn-primary mt-3">
-                <i class="fas fa-arrow-left me-2"></i>Вернуться к списку отделов
+                <i class="fas fa-arrow-left me-2"></i>Вернуться к списку кафедр
             </a>
         </div>
     </div>

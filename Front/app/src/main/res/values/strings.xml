@@ -32,18 +32,18 @@
     <string name="error_short_password">Пароль должен быть не менее 6 символов</string>
     
     <!-- Departments -->
-    <string name="departments_title">Отделы</string>
-    <string name="department_detail_title">Детали отдела</string>
-    <string name="search_departments">Поиск отделов…</string>
+    <string name="departments_title">Кафедры</string>
+    <string name="department_detail_title">Детали кафедры</string>
+    <string name="search_departments">Поиск кафедр…</string>
     <string name="employee_count">Сотрудников: %d</string>
     <string name="employees_title">Сотрудники</string>
-    <string name="no_departments">Отделы не найдены</string>
+    <string name="no_departments">Кафедры не найдены</string>
     <string name="no_employees">Сотрудники не найдены</string>
     
     <!-- Employees -->
     <string name="employee_detail_title">Детали сотрудника</string>
     <string name="employee_info">Информация</string>
-    <string name="employee_department">Отдел</string>
+    <string name="employee_department">Кафедра</string>
     <string name="employee_post">Должность</string>
     <string name="employee_email">Email</string>
     <string name="employee_role">Роль</string>
@@ -64,7 +64,7 @@
     <string name="logout_confirm">Вы уверены, что хотите выйти?</string>
     
     <!-- Empty States -->
-    <string name="empty_state_departments">📋\n\nНет отделов для отображения</string>
+    <string name="empty_state_departments">📋\n\nНет кафедр для отображения</string>
     <string name="empty_state_employees">👥\n\nНет сотрудников для отображения</string>
     
     <!-- Roles -->

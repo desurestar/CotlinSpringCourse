@@ -82,7 +82,7 @@ public class EmployeeController {
             Optional<Departments> departmentOpt = departmentService.getDepartmentById(employeeDTO.getDepartmentId());
 
             if (postOpt.isEmpty() || departmentOpt.isEmpty()) {
-                model.addAttribute("error", "Выбранные отдел или должность не найдены");
+                model.addAttribute("error", "Выбранные кафедра или должность не найдены");
                 return reloadForm(model);
             }
             Users user = null;
