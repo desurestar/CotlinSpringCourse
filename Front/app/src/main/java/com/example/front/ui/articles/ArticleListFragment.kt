@@ -9,7 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.front.data.api.RetrofitInstance
+import com.example.front.data.api.RetrofitClient
+import com.example.front.data.local.PreferencesManager
 import com.example.front.data.repository.ArticleRepository
 import com.example.front.databinding.FragmentArticleListBinding
 import com.example.front.util.Resource
@@ -21,7 +22,9 @@ class ArticleListFragment : Fragment() {
     private val binding get() = _binding!!
     
     private val viewModel: ArticleViewModel by viewModels {
-        ArticleViewModelFactory(ArticleRepository(RetrofitInstance.api))
+        val preferencesManager = PreferencesManager(requireContext())
+        val apiService = RetrofitClient.getApiService { preferencesManager.getToken() }
+        ArticleViewModelFactory(ArticleRepository(apiService))
     }
     
     private lateinit var articleAdapter: ArticleAdapter

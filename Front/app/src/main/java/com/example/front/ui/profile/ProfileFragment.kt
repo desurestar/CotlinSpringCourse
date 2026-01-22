@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.front.data.api.RetrofitInstance
+import com.example.front.data.api.RetrofitClient
 import com.example.front.data.local.PreferencesManager
 import com.example.front.data.repository.ArticleRepository
 import com.example.front.data.repository.EmployeeRepository
@@ -25,10 +25,12 @@ class ProfileFragment : Fragment() {
     private lateinit var preferencesManager: PreferencesManager
     
     private val viewModel: ProfileViewModel by viewModels {
+        val preferencesManager = PreferencesManager(requireContext())
+        val apiService = RetrofitClient.getApiService { preferencesManager.getToken() }
         ProfileViewModelFactory(
-            EmployeeRepository(RetrofitInstance.api),
-            ArticleRepository(RetrofitInstance.api),
-            ResearchTeamRepository(RetrofitInstance.api)
+            EmployeeRepository(apiService),
+            ArticleRepository(apiService),
+            ResearchTeamRepository(apiService)
         )
     }
     
