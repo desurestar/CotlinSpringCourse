@@ -24,6 +24,15 @@ class ResearchTeamRepository(private val apiService: ApiService) {
         }
     }
     
+    suspend fun getTeamMembers(teamId: Long): Resource<List<TeamMember>> {
+        return try {
+            val response = apiService.getTeamMembers(teamId)
+            Resource.Success(response)
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "Ошибка загрузки участников")
+        }
+    }
+    
     suspend fun createTeam(request: ResearchTeamCreateRequest): Resource<ResearchTeam> {
         return try {
             val response = apiService.createResearchTeam(request)

@@ -15,6 +15,7 @@ retrofit = "2.9.0"
 okhttp = "4.12.0"
 coroutines = "1.7.3"
 gson = "2.10.1"
+viewpager2 = "1.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -35,6 +36,7 @@ okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhtt
 okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+androidx-viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager2" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

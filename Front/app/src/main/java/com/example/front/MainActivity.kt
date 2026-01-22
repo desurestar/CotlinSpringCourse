@@ -62,6 +62,30 @@ class MainActivity : AppCompatActivity() {
     
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.action_profile -> {
+                val navController = (supportFragmentManager
+                    .findFragmentById(R.id.nav_host_fragment) as NavHostFragment).navController
+                navController.navigate(R.id.profileFragment)
+                true
+            }
+            R.id.menu_departments -> {
+                val navController = (supportFragmentManager
+                    .findFragmentById(R.id.nav_host_fragment) as NavHostFragment).navController
+                navController.navigate(R.id.departmentListFragment)
+                true
+            }
+            R.id.menu_articles -> {
+                val navController = (supportFragmentManager
+                    .findFragmentById(R.id.nav_host_fragment) as NavHostFragment).navController
+                navController.navigate(R.id.articleListFragment)
+                true
+            }
+            R.id.menu_research_teams -> {
+                val navController = (supportFragmentManager
+                    .findFragmentById(R.id.nav_host_fragment) as NavHostFragment).navController
+                navController.navigate(R.id.researchTeamListFragment)
+                true
+            }
             R.id.action_logout -> {
                 if (PreferencesManager(this).isGuestMode()) {
                     // For guest - go to login

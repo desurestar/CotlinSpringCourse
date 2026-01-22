@@ -80,6 +80,9 @@ interface ApiService {
     @GET("api/articles/employee/{employeeId}")
     suspend fun getArticlesByEmployee(@Path("employeeId") employeeId: Long): List<Article>
     
+    @GET("api/articles/search")
+    suspend fun searchArticles(@Query("query") query: String): List<Article>
+    
     @POST("api/articles")
     suspend fun createArticle(@Body request: ArticleCreateRequest): Article
     

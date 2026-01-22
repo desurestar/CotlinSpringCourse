@@ -52,4 +52,31 @@
             app:argType="long" />
     </fragment>
 
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.front.ui.profile.ProfileFragment"
+        android:label="@string/profile_title">
+        <action
+            android:id="@+id/action_profileFragment_to_articleDetail"
+            app:destination="@id/articleDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/articleListFragment"
+        android:name="com.example.front.ui.articles.ArticleListFragment"
+        android:label="@string/articles_title">
+        <action
+            android:id="@+id/action_articleList_to_articleDetail"
+            app:destination="@id/articleDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/articleDetailFragment"
+        android:name="com.example.front.ui.articles.ArticleDetailFragment"
+        android:label="@string/article_detail_title">
+        <argument
+            android:name="articleId"
+            app:argType="long" />
+    </fragment>
+
 </navigation>
