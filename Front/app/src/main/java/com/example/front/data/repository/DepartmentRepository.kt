@@ -2,7 +2,6 @@ package com.example.front.data.repository
 
 import com.example.front.data.api.ApiService
 import com.example.front.data.model.Department
-import com.example.front.data.model.DepartmentDetail
 import com.example.front.data.model.DepartmentRequest
 import com.example.front.util.Resource
 
@@ -14,19 +13,6 @@ class DepartmentRepository(private val apiService: ApiService) {
             Resource.Success(response)
         } catch (e: Exception) {
             Resource.Error(e.message ?: "Ошибка загрузки кафедр")
-        }
-    }
-    
-    @Deprecated("Backend API does not return employees in department detail")
-    suspend fun getDepartmentById(id: Long): Resource<DepartmentDetail> {
-        return try {
-            // Note: This endpoint actually returns Department, not DepartmentDetail
-            // Keeping for backwards compatibility but should not be used
-            val response = apiService.getDepartmentById(id)
-            val detail = DepartmentDetail(response.id, response.departmentName, null)
-            Resource.Success(detail)
-        } catch (e: Exception) {
-            Resource.Error(e.message ?: "Ошибка загрузки кафедры")
         }
     }
     
