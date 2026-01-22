@@ -1,21 +1,21 @@
-package com.example. front.ui.profile
+package com.example.front.ui.profile
 
 import android.os.Bundle
-import android. view.LayoutInflater
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx. fragment.app.Fragment
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.example. front.R
+import com.example.front.R
 import com.example.front.data.api.RetrofitClient
-import com.example.front. data.local.PreferencesManager
+import com.example.front.data.local.PreferencesManager
 import com.example.front.data.repository.ArticleRepository
-import com.example. front.data.repository.EmployeeRepository
-import com.example. front.data.repository.ResearchTeamRepository
+import com.example.front.data.repository.EmployeeRepository
+import com.example.front.data.repository.ResearchTeamRepository
 import com.example.front.databinding.FragmentProfileTabBinding
 import com.example.front.util.Resource
-import com.google.android.material. card.MaterialCardView
+import com.google.android.material.card.MaterialCardView
 
 class ProfileTeamsTabFragment : Fragment() {
 
@@ -58,14 +58,14 @@ class ProfileTeamsTabFragment : Fragment() {
     }
 
     private fun loadTeams() {
-        viewModel. getEmployeeResearchTeams(employeeId)
+        viewModel.getEmployeeResearchTeams(employeeId)
     }
 
     private fun observeTeams() {
-        viewModel. myTeams.observe(viewLifecycleOwner) { resource ->
+        viewModel.myTeams.observe(viewLifecycleOwner) { resource ->
             when (resource) {
                 is Resource.Loading -> {
-                    binding.progressBar. visibility = View.VISIBLE
+                    binding.progressBar.visibility = View.VISIBLE
                     binding.contentContainer.visibility = View.GONE
                     binding.tvEmptyState.visibility = View.GONE
                 }
@@ -73,7 +73,7 @@ class ProfileTeamsTabFragment : Fragment() {
                     binding.progressBar.visibility = View.GONE
 
                     // ИСПРАВЛЕНИЕ: myTeams должен возвращать List<ResearchTeam>, а не List<TeamMember>
-                    val teams = resource.data ?:  emptyList()
+                    val teams = resource.data ?: emptyList()
                     if (teams.isEmpty()) {
                         binding.contentContainer.visibility = View.GONE
                         binding.tvEmptyState.visibility = View.VISIBLE
@@ -82,7 +82,7 @@ class ProfileTeamsTabFragment : Fragment() {
                         binding.contentContainer.visibility = View.VISIBLE
                         binding.tvEmptyState.visibility = View.GONE
 
-                        binding.contentContainer. removeAllViews()
+                        binding.contentContainer.removeAllViews()
 
                         // Теперь работаем напрямую с ResearchTeam
                         teams.forEach { team ->
@@ -95,7 +95,7 @@ class ProfileTeamsTabFragment : Fragment() {
                     }
                 }
                 is Resource.Error -> {
-                    binding.progressBar.visibility = View. GONE
+                    binding.progressBar.visibility = View.GONE
                     binding.contentContainer.visibility = View.GONE
                     binding.tvEmptyState.visibility = View.VISIBLE
                     binding.tvEmptyState.text = resource.message ?: "Ошибка загрузки коллективов"
@@ -104,18 +104,18 @@ class ProfileTeamsTabFragment : Fragment() {
         }
     }
 
-    private fun addTeamCard(teamName: String, leaderName:  String, description: String) {
+    private fun addTeamCard(teamName: String, leaderName: String, description: String) {
         val cardView = MaterialCardView(requireContext()).apply {
             layoutParams = ViewGroup.MarginLayoutParams(
-                ViewGroup. LayoutParams.MATCH_PARENT,
-                ViewGroup. LayoutParams.WRAP_CONTENT
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
             ).apply {
                 bottomMargin = resources.getDimensionPixelSize(R.dimen.card_margin)
             }
             radius = resources.getDimension(R.dimen.card_corner_radius)
             cardElevation = resources.getDimension(R.dimen.card_elevation)
 
-            val padding = resources.getDimensionPixelSize(R.dimen. card_padding)
+            val padding = resources.getDimensionPixelSize(R.dimen.card_padding)
             setContentPadding(padding, padding, padding, padding)
         }
 
@@ -145,7 +145,7 @@ class ProfileTeamsTabFragment : Fragment() {
     companion object {
         private const val ARG_EMPLOYEE_ID = "employee_id"
 
-        fun newInstance(employeeId:  Long): ProfileTeamsTabFragment {
+        fun newInstance(employeeId: Long): ProfileTeamsTabFragment {
             return ProfileTeamsTabFragment().apply {
                 arguments = Bundle().apply {
                     putLong(ARG_EMPLOYEE_ID, employeeId)
