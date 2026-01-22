@@ -8,7 +8,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.front.R
-import com.example.front.data.api.RetrofitInstance
+import com.example.front.data.api.RetrofitClient
+import com.example.front.data.local.PreferencesManager
 import com.example.front.data.repository.ArticleRepository
 import com.example.front.data.repository.EmployeeRepository
 import com.example.front.data.repository.ResearchTeamRepository
@@ -22,10 +23,12 @@ class ProfileTeamsTabFragment : Fragment() {
     private val binding get() = _binding!!
     
     private val viewModel: ProfileViewModel by activityViewModels {
+        val preferencesManager = PreferencesManager(requireContext())
+        val apiService = RetrofitClient.getApiService { preferencesManager.getToken() }
         ProfileViewModelFactory(
-            EmployeeRepository(RetrofitInstance.api),
-            ArticleRepository(RetrofitInstance.api),
-            ResearchTeamRepository(RetrofitInstance.api)
+            EmployeeRepository(apiService),
+            ArticleRepository(apiService),
+            ResearchTeamRepository(apiService)
         )
     }
     
