@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.front.data.model.Article
 import com.example.front.data.model.Employee
-import com.example.front.data.model.TeamMember
+import com.example.front.data.model.ResearchTeam
 import com.example.front.data.repository.ArticleRepository
 import com.example.front.data.repository.EmployeeRepository
 import com.example.front.data.repository.ResearchTeamRepository
@@ -28,8 +28,8 @@ class ProfileViewModel(
     private val _coauthoredArticles = MutableLiveData<Resource<List<Article>>>()
     val coauthoredArticles: LiveData<Resource<List<Article>>> = _coauthoredArticles
     
-    private val _myTeams = MutableLiveData<Resource<List<TeamMember>>>()
-    val myTeams: LiveData<Resource<List<TeamMember>>> = _myTeams
+    private val _myTeams = MutableLiveData<Resource<List<ResearchTeam>>>()
+    val myTeams: LiveData<Resource<List<ResearchTeam>>> = _myTeams
     
     fun getCurrentEmployee(userId: Long) {
         viewModelScope.launch {
@@ -72,20 +72,14 @@ class ProfileViewModel(
     fun getEmployeeResearchTeams(employeeId: Long) {
         viewModelScope.launch {
             _myTeams.value = Resource.Loading()
-            // Get all research teams and filter for teams where employee is a member
             val teamsResult = researchTeamRepository.getResearchTeams()
             if (teamsResult is Resource.Success && teamsResult.data != null) {
-                val allMembers = mutableListOf<TeamMember>()
-                for (team in teamsResult.data) {
-                    val membersResult = researchTeamRepository.getTeamMembers(team.id)
-                    if (membersResult is Resource.Success && membersResult.data != null) {
-                        val employeeMembers = membersResult.data.filter { 
-                            it.employee?.id == employeeId 
-                        }
-                        allMembers.addAll(employeeMembers)
-                    }
+                // Filter teams where employeeId is a leader or member
+                val userTeams = teamsResult.data.filter { team ->
+                    team.leader.id == employeeId || 
+                    team.members?.any { it.employee?.id == employeeId } == true
                 }
-                _myTeams.value = Resource.Success(allMembers)
+                _myTeams.value = Resource.Success(userTeams)
             } else {
                 _myTeams.value = Resource.Error("Ошибка загрузки коллективов")
             }
