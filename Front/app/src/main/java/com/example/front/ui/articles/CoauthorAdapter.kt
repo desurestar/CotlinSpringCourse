@@ -30,7 +30,7 @@ class CoauthorAdapter : ListAdapter<Employee, CoauthorAdapter.CoauthorViewHolder
         fun bind(employee: Employee) {
             binding.apply {
                 tvCoauthorName.text = employee.name
-                tvCoauthorDepartment.text = employee.department?.name ?: "Кафедра не указана"
+                tvCoauthorDepartment.text = employee.department?.departmentName ?: "Кафедра не указана"
             }
         }
     }
