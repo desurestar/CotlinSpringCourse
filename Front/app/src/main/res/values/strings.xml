@@ -100,4 +100,30 @@
     <string name="add_member">Добавить участника</string>
     <string name="add_work">Добавить работу</string>
     <string name="create_team">Создать коллектив</string>
+    
+    <!-- Profile -->
+    <string name="action_menu">Меню</string>
+    <string name="action_profile">Профиль</string>
+    <string name="menu_departments">Кафедры</string>
+    <string name="menu_articles">Статьи</string>
+    <string name="menu_research_teams">Научные коллективы</string>
+    <string name="profile_title">Мой профиль</string>
+    <string name="profile_info">Информация</string>
+    <string name="profile_my_articles">Мои статьи</string>
+    <string name="profile_participation">Участие</string>
+    <string name="profile_teams">Коллективы</string>
+    <string name="profile_login_required">Войдите для просмотра профиля</string>
+    
+    <!-- Articles -->
+    <string name="articles_title">Все статьи</string>
+    <string name="article_detail_title">Детали статьи</string>
+    <string name="main_author">Главный автор</string>
+    <string name="external_link">Внешняя ссылка</string>
+    <string name="open_link">Открыть ссылку</string>
+    <string name="search_articles">Поиск статей</string>
+    <string name="created_at">Создано</string>
+    <string name="updated_at">Обновлено</string>
+    
+    <!-- Empty States -->
+    <string name="no_teams">Нет коллективов</string>
 </resources>

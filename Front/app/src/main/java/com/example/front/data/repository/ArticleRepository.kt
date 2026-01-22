@@ -25,6 +25,24 @@ class ArticleRepository(private val apiService: ApiService) {
         }
     }
     
+    suspend fun getArticleById(id: Long): Resource<Article> {
+        return try {
+            val response = apiService.getArticleById(id)
+            Resource.Success(response)
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "Ошибка загрузки статьи")
+        }
+    }
+    
+    suspend fun searchArticles(query: String): Resource<List<Article>> {
+        return try {
+            val response = apiService.searchArticles(query)
+            Resource.Success(response)
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "Ошибка поиска статей")
+        }
+    }
+    
     suspend fun createArticle(request: ArticleCreateRequest): Resource<Article> {
         return try {
             val response = apiService.createArticle(request)
