@@ -16,6 +16,7 @@ import com.example.front.data.repository.ResearchTeamRepository
 import com.example.front.databinding.FragmentProfileTabBinding
 import com.example.front.ui.articles.ArticleAdapter
 import com.example.front.util.Resource
+import com.google.android.material.snackbar.Snackbar
 
 class ProfileArticlesTabFragment : Fragment() {
     
@@ -58,8 +59,31 @@ class ProfileArticlesTabFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         
         setupRecyclerView()
+        setupCreateButton()
         loadArticles()
         observeArticles()
+    }
+    
+    private fun setupCreateButton() {
+        // Only show create button for main author tab
+        if (isMainAuthor) {
+            binding.btnCreateArticle.visibility = View.VISIBLE
+            binding.btnCreateArticle.setOnClickListener {
+                val dialog = CreateArticleDialog.newInstance()
+                dialog.setOnArticleCreatedListener {
+                    // Refresh articles list
+                    loadArticles()
+                    Snackbar.make(
+                        binding.root,
+                        "Статья успешно создана",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+                dialog.show(childFragmentManager, CreateArticleDialog.TAG)
+            }
+        } else {
+            binding.btnCreateArticle.visibility = View.GONE
+        }
     }
     
     private fun setupRecyclerView() {

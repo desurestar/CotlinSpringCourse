@@ -53,6 +53,26 @@ class ProfileFragment : Fragment() {
         } else {
             showProfileContent()
             loadProfileData()
+            setupFAB()
+        }
+    }
+    
+    private fun setupFAB() {
+        binding.fabCreateTeam.setOnClickListener {
+            val dialog = CreateResearchTeamDialog.newInstance()
+            dialog.setOnTeamCreatedListener {
+                // Refresh teams list
+                val employeeId = preferencesManager.getEmployeeId()
+                if (employeeId != -1L) {
+                    viewModel.getEmployeeResearchTeams(employeeId)
+                    Snackbar.make(
+                        binding.root,
+                        "Научный коллектив успешно создан",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            dialog.show(childFragmentManager, CreateResearchTeamDialog.TAG)
         }
     }
     

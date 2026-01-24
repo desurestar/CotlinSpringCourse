@@ -45,7 +45,7 @@ public class ResearchTeamRestController {
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             logger.error("Error fetching research teams", e);
-            throw new RuntimeException("Failed to fetch research teams");
+            throw new BadRequestException("Failed to fetch research teams: " + e.getMessage());
         }
     }
 
@@ -61,7 +61,7 @@ public class ResearchTeamRestController {
             throw e;
         } catch (Exception e) {
             logger.error("Error fetching research team", e);
-            throw new RuntimeException("Failed to fetch research team");
+            throw new BadRequestException("Failed to fetch research team: " + e.getMessage());
         }
     }
 
@@ -134,7 +134,7 @@ public class ResearchTeamRestController {
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             logger.error("Error fetching team members", e);
-            throw new RuntimeException("Failed to fetch team members");
+            throw new BadRequestException("Failed to fetch team members: " + e.getMessage());
         }
     }
 
@@ -212,7 +212,7 @@ public class ResearchTeamRestController {
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             logger.error("Error fetching team works", e);
-            throw new RuntimeException("Failed to fetch team works");
+            throw new BadRequestException("Failed to fetch team works: " + e.getMessage());
         }
     }
 

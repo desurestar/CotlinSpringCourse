@@ -5,8 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.front.data.model.Article
+import com.example.front.data.model.ArticleCreateRequest
 import com.example.front.data.model.Employee
 import com.example.front.data.model.ResearchTeam
+import com.example.front.data.model.ResearchTeamCreateRequest
 import com.example.front.data.repository.ArticleRepository
 import com.example.front.data.repository.EmployeeRepository
 import com.example.front.data.repository.ResearchTeamRepository
@@ -30,6 +32,12 @@ class ProfileViewModel(
     
     private val _myTeams = MutableLiveData<Resource<List<ResearchTeam>>>()
     val myTeams: LiveData<Resource<List<ResearchTeam>>> = _myTeams
+    
+    private val _teamCreationResult = MutableLiveData<Resource<ResearchTeam>>()
+    val teamCreationResult: LiveData<Resource<ResearchTeam>> = _teamCreationResult
+    
+    private val _articleCreationResult = MutableLiveData<Resource<Article>>()
+    val articleCreationResult: LiveData<Resource<Article>> = _articleCreationResult
     
     fun getCurrentEmployee(employeeId: Long) {
         viewModelScope.launch {
@@ -83,6 +91,20 @@ class ProfileViewModel(
             } else {
                 _myTeams.value = Resource.Error("Ошибка загрузки коллективов")
             }
+        }
+    }
+    
+    fun createResearchTeam(request: ResearchTeamCreateRequest) {
+        viewModelScope.launch {
+            _teamCreationResult.value = Resource.Loading()
+            _teamCreationResult.value = researchTeamRepository.createTeam(request)
+        }
+    }
+    
+    fun createArticle(request: ArticleCreateRequest) {
+        viewModelScope.launch {
+            _articleCreationResult.value = Resource.Loading()
+            _articleCreationResult.value = articleRepository.createArticle(request)
         }
     }
 }
