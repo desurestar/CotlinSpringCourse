@@ -5,8 +5,10 @@ import kaf.pin.lab1corp.DTO.request.LoginRequest;
 import kaf.pin.lab1corp.DTO.request.RegisterRequest;
 import kaf.pin.lab1corp.DTO.response.LoginResponse;
 import kaf.pin.lab1corp.DTO.response.UserResponse;
+import kaf.pin.lab1corp.entity.Employes;
 import kaf.pin.lab1corp.entity.Users;
 import kaf.pin.lab1corp.exception.BadRequestException;
+import kaf.pin.lab1corp.repository.EmployesRepository;
 import kaf.pin.lab1corp.service.JwtService;
 import kaf.pin.lab1corp.service.UserService;
 import org.slf4j.Logger;
@@ -25,12 +27,14 @@ public class AuthRestController {
 
     private final UserService userService;
     private final JwtService jwtService;
+    private final EmployesRepository employesRepository;
     private final Logger logger = LoggerFactory.getLogger(AuthRestController.class);
 
     @Autowired
-    public AuthRestController(UserService userService, JwtService jwtService) {
+    public AuthRestController(UserService userService, JwtService jwtService, EmployesRepository employesRepository) {
         this.userService = userService;
         this.jwtService = jwtService;
+        this.employesRepository = employesRepository;
     }
 
     @PostMapping("/login")
@@ -50,8 +54,12 @@ public class AuthRestController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
             
+            // Find Employee by User ID
+            Optional<Employes> employeeOpt = employesRepository.findByUserId(user.getId());
+            Long employeeId = employeeOpt.map(Employes::getId).orElse(null);
+            
             String token = jwtService.generateToken(user.getEmail(), user.getRole(), user.getId());
-            LoginResponse response = new LoginResponse(token, user.getId(), user.getEmail(), user.getRole());
+            LoginResponse response = new LoginResponse(token, user.getId(), user.getEmail(), user.getRole(), employeeId);
             
             return ResponseEntity.ok(response);
         } catch (Exception e) {

@@ -31,10 +31,10 @@ class ProfileViewModel(
     private val _myTeams = MutableLiveData<Resource<List<ResearchTeam>>>()
     val myTeams: LiveData<Resource<List<ResearchTeam>>> = _myTeams
     
-    fun getCurrentEmployee(userId: Long) {
+    fun getCurrentEmployee(employeeId: Long) {
         viewModelScope.launch {
             _currentEmployee.value = Resource.Loading()
-            _currentEmployee.value = employeeRepository.getEmployeeById(userId)
+            _currentEmployee.value = employeeRepository.getEmployeeById(employeeId)
         }
     }
     
