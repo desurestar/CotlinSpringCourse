@@ -1,11 +1,9 @@
 package com.example.front.ui.profile
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.example.front.R
@@ -17,7 +15,6 @@ import com.example.front.data.repository.EmployeeRepository
 import com.example.front.data.repository.ResearchTeamRepository
 import com.example.front.databinding.DialogCreateResearchTeamBinding
 import com.example.front.util.Resource
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 
 class CreateResearchTeamDialog : DialogFragment() {

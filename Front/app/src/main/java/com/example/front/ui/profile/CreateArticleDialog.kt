@@ -15,8 +15,6 @@ import com.example.front.data.repository.ResearchTeamRepository
 import com.example.front.databinding.DialogCreateArticleBinding
 import com.example.front.util.Resource
 import com.google.android.material.snackbar.Snackbar
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 class CreateArticleDialog : DialogFragment() {
 
