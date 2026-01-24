@@ -13,6 +13,7 @@ class PreferencesManager(context: Context) {
         private const val KEY_EMAIL = "email"
         private const val KEY_ROLE = "role"
         private const val KEY_IS_GUEST = "is_guest"
+        private const val KEY_EMPLOYEE_ID = "employee_id"
     }
     
     fun saveToken(token: String) {
@@ -23,11 +24,16 @@ class PreferencesManager(context: Context) {
         return sharedPreferences.getString(KEY_TOKEN, null)
     }
     
-    fun saveUser(userId: Long, email: String, role: String) {
+    fun saveUser(userId: Long, email: String, role: String, employeeId: Long? = null) {
         sharedPreferences.edit().apply {
             putLong(KEY_USER_ID, userId)
             putString(KEY_EMAIL, email)
             putString(KEY_ROLE, role)
+            if (employeeId != null) {
+                putLong(KEY_EMPLOYEE_ID, employeeId)
+            } else {
+                remove(KEY_EMPLOYEE_ID)
+            }
             putBoolean(KEY_IS_GUEST, false)
             apply()
         }
@@ -53,6 +59,10 @@ class PreferencesManager(context: Context) {
     
     fun getRole(): String? {
         return sharedPreferences.getString(KEY_ROLE, null)
+    }
+    
+    fun getEmployeeId(): Long {
+        return sharedPreferences.getLong(KEY_EMPLOYEE_ID, -1L)
     }
     
     fun clearAuth() {

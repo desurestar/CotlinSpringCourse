@@ -31,4 +31,7 @@ public interface EmployesRepository extends CrudRepository<Employes, Long> {
 
     @Query("SELECT e FROM Employes e LEFT JOIN FETCH e.post LEFT JOIN FETCH e.department")
     List<Employes> findAllWithDetails();
+
+    @Query("SELECT e FROM Employes e WHERE e.user.id = :userId")
+    java.util.Optional<Employes> findByUserId(@Param("userId") Long userId);
 }

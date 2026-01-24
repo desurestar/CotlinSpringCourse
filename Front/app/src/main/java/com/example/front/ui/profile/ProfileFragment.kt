@@ -67,19 +67,19 @@ class ProfileFragment : Fragment() {
     }
     
     private fun loadProfileData() {
-        val userId = preferencesManager.getUserId()
+        val employeeId = preferencesManager.getEmployeeId()
         
-        if (userId == -1L) {
+        if (employeeId == -1L) {
             Snackbar.make(
                 binding.root,
-                "Ошибка: пользователь не авторизован",
+                "Ошибка: нет связанного сотрудника",
                 Snackbar.LENGTH_LONG
             ).show()
             return
         }
         
         // Load employee data
-        viewModel.getCurrentEmployee(userId)
+        viewModel.getCurrentEmployee(employeeId)
         
         // Observe employee data
         viewModel.currentEmployee.observe(viewLifecycleOwner) { resource ->

@@ -16,7 +16,7 @@ class AuthRepository(
         return try {
             val response = apiService.login(LoginRequest(email, password))
             preferencesManager.saveToken(response.token)
-            preferencesManager.saveUser(response.userId, response.email, response.role)
+            preferencesManager.saveUser(response.userId, response.email, response.role, response.employeeId)
             Resource.Success(response)
         } catch (e: Exception) {
             Resource.Error(e.message ?: "Ошибка входа")
