@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import com.example.front.R
 import com.example.front.data.api.RetrofitClient
 import com.example.front.data.local.PreferencesManager
 import com.example.front.data.model.ResearchTeamCreateRequest
