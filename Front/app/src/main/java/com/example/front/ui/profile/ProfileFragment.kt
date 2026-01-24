@@ -69,10 +69,20 @@ class ProfileFragment : Fragment() {
     private fun loadProfileData() {
         val employeeId = preferencesManager.getEmployeeId()
         
+        android.util.Log.d("ProfileFragment", "Loading profile for employeeId: $employeeId")
+        
         if (employeeId == -1L) {
+            // User doesn't have an employee record
+            android.util.Log.w("ProfileFragment", "No employee record found. UserId: ${preferencesManager.getUserId()}")
+            
+            // Show guest-like view with explanation
+            binding.guestCard.visibility = View.VISIBLE
+            binding.profileContent.visibility = View.GONE
+            
+            // Show informative message
             Snackbar.make(
                 binding.root,
-                "Ошибка: нет связанного сотрудника",
+                "У вашей учетной записи нет профиля сотрудника. Обратитесь к администратору для связывания аккаунта.",
                 Snackbar.LENGTH_LONG
             ).show()
             return

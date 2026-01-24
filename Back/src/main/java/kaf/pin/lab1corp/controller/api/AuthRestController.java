@@ -58,6 +58,14 @@ public class AuthRestController {
             Optional<Employes> employeeOpt = employesRepository.findByUserId(user.getId());
             Long employeeId = employeeOpt.map(Employes::getId).orElse(null);
             
+            // Add logging for debugging
+            logger.info("Login successful for user ID: {}, email: {}, found employee ID: {}", 
+                user.getId(), user.getEmail(), employeeId);
+            if (employeeId == null) {
+                logger.warn("No employee record found for user ID: {}. User can still login but won't see employee-specific features.", 
+                    user.getId());
+            }
+            
             String token = jwtService.generateToken(user.getEmail(), user.getRole(), user.getId());
             LoginResponse response = new LoginResponse(token, user.getId(), user.getEmail(), user.getRole(), employeeId);
             
