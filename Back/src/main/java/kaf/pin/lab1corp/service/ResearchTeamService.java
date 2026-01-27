@@ -230,10 +230,14 @@ public class ResearchTeamService {
     }
 
     public List<ResearchTeam> getTeamsByLeaderId(Long leaderId) {
-        return researchTeamRepository.findByLeaderId(leaderId);
+        return null;
     }
 
     public List<ResearchTeam> getAllTeamsWithMembers() {
         return researchTeamRepository.findAllWithMembers();
+    }
+
+    public ResearchTeam saveTeam(ResearchTeam team) {
+        return researchTeamRepository.save(team);
     }
 }

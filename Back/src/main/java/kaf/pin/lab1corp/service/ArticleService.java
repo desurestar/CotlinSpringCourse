@@ -96,4 +96,7 @@ public class ArticleService {
     public void deleteArticle(Long id) {
         articleRepository.deleteById(id);
     }
+
+    public void addCoauthor(Long id, Long coauthorId) {
+    }
 }

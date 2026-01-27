@@ -4,15 +4,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class AuthController {
+public class LoginController {
 
     @GetMapping("/login")
-    public String loginPage() {
+    public String showLoginPage() {
         return "login";
     }
 
-    @GetMapping("/register")
-    public String registerPage() {
-        return "register";
+    @GetMapping("/access-denied")
+    public String showAccessDeniedPage() {
+        return "access-denied";
     }
 }

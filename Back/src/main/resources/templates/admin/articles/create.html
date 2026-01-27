@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Добавить публикацию</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    body { background-color: #f8f9fa; padding-top: 20px; }
+    .card { border: none; box-shadow: 0 0 15px rgba(0,0,0,0.05); }
+    .required::after { content: " *"; color: #dc3545; }
+  </style>
+</head>
+<body>
+<div class="container-fluid">
+  <div class="mb-3">
+    <a th:href="@{/admin/articles}" class="btn btn-outline-secondary btn-sm">
+      <i class="fas fa-arrow-left me-1"></i> Назад к списку
+    </a>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card">
+        <div class="card-header bg-dark text-white">
+          <h5 class="mb-0"><i class="fas fa-file-alt me-2"></i>Добавить новую публикацию</h5>
+        </div>
+        <div class="card-body">
+          <form th:action="@{/admin/articles}" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+            <div class="mb-4">
+              <h6 class="border-bottom pb-2 mb-3"><i class="fas fa-info-circle me-2"></i>Основная информация</h6>
+              <div class="row">
+                <div class="col-md-12 mb-3">
+                  <label for="title" class="form-label required">Название публикации</label>
+                  <input type="text" class="form-control" id="title" name="title" required
+                         placeholder="Например: Исследование методов машинного обучения..."
+                         th:value="${param.title}">
+                </div>
+                <div class="col-md-12 mb-3">
+                  <label for="description" class="form-label required">Описание</label>
+                  <textarea class="form-control" id="description" name="description" rows="5" required
+                            placeholder="Подробное описание публикации..."
+                            th:text="${param.description}"></textarea>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="publicationDate" class="form-label">Дата публикации</label>
+                  <input type="date" class="form-control" id="publicationDate" name="publicationDate"
+                         th:value="${param.publicationDate}">
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="externalLink" class="form-label">Ссылка (если есть)</label>
+                  <input type="url" class="form-control" id="externalLink" name="externalLink"
+                         placeholder="https://..." th:value="${param.externalLink}">
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <h6 class="border-bottom pb-2 mb-3"><i class="fas fa-users me-2"></i>Авторы</h6>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="mainAuthorId" class="form-label required">Основной автор</label>
+                  <select class="form-select" id="mainAuthorId" name="mainAuthorId" required>
+                    <option value="">Выберите основного автора</option>
+                    <option th:each="employee : ${employees}"
+                            th:value="${employee.id}"
+                            th:text="${employee.name + ' (' + (employee.post?.post_name ?: 'сотрудник') + ')'}"
+                            th:selected="${param.mainAuthorId == employee.id}">
+                    </option>
+                  </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="coauthorIds" class="form-label">Соавторы</label>
+                  <select class="form-select" id="coauthorIds" name="coauthorIds" multiple size="4">
+                    <option th:each="employee : ${employees}"
+                            th:value="${employee.id}"
+                            th:text="${employee.name}">
+                    </option>
+                  </select>
+                  <div class="form-text">Удерживайте Ctrl для выбора нескольких</div>
+                </div>
+              </div>
+            </div>
+
+            <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show mb-4">
+              <i class="fas fa-exclamation-triangle me-2"></i>
+              <span th:text="${param.error}"></span>
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <div th:if="${param.success}" class="alert alert-success alert-dismissible fade show mb-4">
+              <i class="fas fa-check-circle me-2"></i>
+              <span th:text="${param.success}"></span>
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <div class="alert alert-info">
+              <i class="fas fa-lightbulb me-2"></i>
+              Публикация будет доступна в системе после сохранения
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <a th:href="@{/admin/articles}" class="btn btn-secondary me-md-2">Отмена</a>
+              <button type="submit" class="btn btn-dark">
+                <i class="fas fa-save me-2"></i>Сохранить публикацию
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('title').focus();
+      setTimeout(() => document.querySelectorAll('.alert').forEach(a => new bootstrap.Alert(a).close()), 5000);
+      if (!document.getElementById('publicationDate').value) {
+          document.getElementById('publicationDate').value = new Date().toISOString().split('T')[0];
+      }
+  });
+</script>
+</body>
+</html>
