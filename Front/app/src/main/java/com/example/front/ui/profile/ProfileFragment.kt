@@ -58,6 +58,23 @@ class ProfileFragment : Fragment() {
     }
     
     private fun setupFAB() {
+        binding.fabCreateArticle.setOnClickListener {
+            val dialog = CreateArticleDialog.newInstance()
+            dialog.setOnArticleCreatedListener {
+                // Refresh articles list
+                val employeeId = preferencesManager.getEmployeeId()
+                if (employeeId != -1L) {
+                    viewModel.getEmployeeArticlesAsAuthor(employeeId)
+                    Snackbar.make(
+                        binding.root,
+                        "Статья успешно создана",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            dialog.show(childFragmentManager, CreateArticleDialog.TAG)
+        }
+
         binding.fabCreateTeam.setOnClickListener {
             val dialog = CreateResearchTeamDialog.newInstance()
             dialog.setOnTeamCreatedListener {

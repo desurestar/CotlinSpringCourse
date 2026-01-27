@@ -80,13 +80,11 @@ class ProfileInfoTabFragment : Fragment() {
 
                         // Post Card
                         employee.post?.let { post ->
-                            // ИСПРАВЛЕНИЕ: используем postName вместо name
                             addInfoCard("Должность", post.postName)
                         }
 
                         // Department Card
                         employee.department?.let { department ->
-                            // ИСПРАВЛЕНИЕ: используем departmentName вместо name
                             addInfoCard("Кафедра", department.departmentName)
                         }
 
