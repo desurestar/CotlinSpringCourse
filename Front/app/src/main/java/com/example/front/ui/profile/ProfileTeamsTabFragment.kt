@@ -72,7 +72,6 @@ class ProfileTeamsTabFragment : Fragment() {
                 is Resource.Success -> {
                     binding.progressBar.visibility = View.GONE
 
-                    // ИСПРАВЛЕНИЕ: myTeams должен возвращать List<ResearchTeam>, а не List<TeamMember>
                     val teams = resource.data ?: emptyList()
                     if (teams.isEmpty()) {
                         binding.contentContainer.visibility = View.GONE
@@ -84,7 +83,6 @@ class ProfileTeamsTabFragment : Fragment() {
 
                         binding.contentContainer.removeAllViews()
 
-                        // Теперь работаем напрямую с ResearchTeam
                         teams.forEach { team ->
                             addTeamCard(
                                 teamName = team.name,
