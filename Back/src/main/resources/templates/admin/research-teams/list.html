@@ -66,12 +66,12 @@
 
           <div class="d-flex justify-content-between align-items-center">
                             <span class="badge bg-secondary">
-                                <i class="fas fa-user me-1"></i>
-                                Участников: <span th:text="${team.teamMembers != null ? team.teamMembers.size() : 0}"></span>
+                                 <i class="fas fa-user me-1"></i>
+                                 Участников: <span th:text="${team.members != null ? team.members.size() : 0}"></span>
                             </span>
-            <span class="badge bg-primary">
-                                <i class="fas fa-tasks me-1"></i>
-                                Проектов: <span th:text="${team.teamResearchWorks != null ? team.teamResearchWorks.size() : 0}"></span>
+                             <span class="badge bg-primary">
+                            <i class="fas fa-tasks me-1"></i>
+                                 Проектов: <span th:text="${team.works != null ? team.works.size() : 0}"></span>
                             </span>
           </div>
         </div>
