@@ -1,5 +1,7 @@
 package com.example.front.data.model
 
+import com.google.gson.annotations.SerializedName
+
 data class ResearchTeam(
     val id: Long,
     val name: String,
@@ -7,6 +9,7 @@ data class ResearchTeam(
     val leader: Employee?,
     val createdAt: String?,
     val members: List<TeamMember>? = null,
+    @SerializedName("works")
     val researchWorks: List<TeamResearchWork>? = null
 )
 
