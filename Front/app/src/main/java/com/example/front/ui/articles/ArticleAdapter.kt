@@ -41,16 +41,11 @@ class ArticleAdapter(
                 }
             }
             
-            // Long press to delete (if delete callback is provided)
-            if (onDeleteClick != null) {
-                binding.root.setOnLongClickListener {
-                    val position = bindingAdapterPosition
-                    if (position != RecyclerView.NO_POSITION) {
-                        onDeleteClick.invoke(getItem(position))
-                        true
-                    } else {
-                        false
-                    }
+            // Handle delete button click
+            binding.btnDelete.setOnClickListener {
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onDeleteClick?.invoke(getItem(position))
                 }
             }
         }
@@ -60,6 +55,9 @@ class ArticleAdapter(
                 tvArticleTitle.text = article.title
                 tvArticleDescription.text = article.description
                 tvMainAuthor.text = "Автор: ${article.mainAuthor!!.name}"
+                
+                // Show delete button if delete callback is available
+                btnDelete.visibility = if (onDeleteClick != null) View.VISIBLE else View.GONE
                 
                 // Format publication date
                 article.publicationDate?.let { date ->

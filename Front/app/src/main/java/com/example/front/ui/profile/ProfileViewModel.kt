@@ -193,7 +193,6 @@ class ProfileViewModel(
         viewModelScope.launch {
             try {
                 Log.d(TAG, "Creating article: ${request.title}")
-                Log.d(TAG, "Publication date: ${request.publicationDate}")
                 _articleCreationResult.value = Resource.Loading()
                 val result = articleRepository.createArticle(request)
                 _articleCreationResult.value = result
