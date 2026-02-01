@@ -1,5 +1,6 @@
 package kaf.pin.lab1corp.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,9 +27,11 @@ public class TeamResearchWork {
     private String status = "IN_PROGRESS";
 
     @Column(name = "start_date")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
 
     @Column(name = "created_at")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
 
     @PrePersist
