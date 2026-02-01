@@ -63,7 +63,8 @@ public class ArticleRestController {
             article.setDescription(dto.getDescription());
             article.setExternalLink(dto.getExternalLink());
             
-            // Publication date is set automatically by the service
+            // Publication date is nullable and can be set later if needed
+            // It's not required during creation
             
             Article savedArticle = articleService.createArticle(
                 article, 
@@ -90,7 +91,7 @@ public class ArticleRestController {
             article.setDescription(dto.getDescription());
             article.setExternalLink(dto.getExternalLink());
             
-            // Publication date remains unchanged on update
+            // Publication date is not updated - it preserves the existing value
             
             Article updatedArticle = articleService.updateArticle(id, article, dto.getCoauthorIds());
             return ResponseEntity.ok(updatedArticle);
