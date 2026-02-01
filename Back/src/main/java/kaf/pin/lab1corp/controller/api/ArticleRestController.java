@@ -63,8 +63,8 @@ public class ArticleRestController {
             article.setDescription(dto.getDescription());
             article.setExternalLink(dto.getExternalLink());
             
-            // Publication date is nullable and can be set later if needed
-            // It's not required during creation
+            // Automatically set publication date to today
+            article.setPublicationDate(LocalDate.now());
             
             Article savedArticle = articleService.createArticle(
                 article, 
