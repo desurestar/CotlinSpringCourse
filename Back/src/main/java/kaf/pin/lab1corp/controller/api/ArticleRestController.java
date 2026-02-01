@@ -55,7 +55,6 @@ public class ArticleRestController {
             System.out.println("SERVER: Creating article with data: " + dto);
             System.out.println("  Title: " + dto.getTitle());
             System.out.println("  Description: " + dto.getDescription());
-            System.out.println("  Publication Date: " + dto.getPublicationDate());
             System.out.println("  Main Author ID: " + dto.getMainAuthorId());
             System.out.println("  Coauthor IDs: " + dto.getCoauthorIds());
             
@@ -64,17 +63,7 @@ public class ArticleRestController {
             article.setDescription(dto.getDescription());
             article.setExternalLink(dto.getExternalLink());
             
-            // Parse publication date from string
-            if (dto.getPublicationDate() != null && !dto.getPublicationDate().isEmpty()) {
-                try {
-                    LocalDate date = LocalDate.parse(dto.getPublicationDate(), DateTimeFormatter.ISO_LOCAL_DATE);
-                    article.setPublicationDate(date);
-                    System.out.println("  Parsed publication date: " + date);
-                } catch (DateTimeParseException e) {
-                    // Log error and continue without setting date
-                    System.err.println("Failed to parse publication date: " + dto.getPublicationDate() + ", error: " + e.getMessage());
-                }
-            }
+            // Publication date is set automatically by the service
             
             Article savedArticle = articleService.createArticle(
                 article, 
@@ -101,16 +90,7 @@ public class ArticleRestController {
             article.setDescription(dto.getDescription());
             article.setExternalLink(dto.getExternalLink());
             
-            // Parse publication date from string
-            if (dto.getPublicationDate() != null && !dto.getPublicationDate().isEmpty()) {
-                try {
-                    LocalDate date = LocalDate.parse(dto.getPublicationDate(), DateTimeFormatter.ISO_LOCAL_DATE);
-                    article.setPublicationDate(date);
-                } catch (DateTimeParseException e) {
-                    // Log error and continue without setting date
-                    System.err.println("Failed to parse publication date: " + dto.getPublicationDate());
-                }
-            }
+            // Publication date remains unchanged on update
             
             Article updatedArticle = articleService.updateArticle(id, article, dto.getCoauthorIds());
             return ResponseEntity.ok(updatedArticle);
