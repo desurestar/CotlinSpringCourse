@@ -38,16 +38,7 @@ public class ArticleController {
             article.setDescription(dto.getDescription());
             article.setExternalLink(dto.getExternalLink());
             
-            // Parse publication date from string
-            if (dto.getPublicationDate() != null && !dto.getPublicationDate().isEmpty()) {
-                try {
-                    LocalDate date = LocalDate.parse(dto.getPublicationDate(), DateTimeFormatter.ISO_LOCAL_DATE);
-                    article.setPublicationDate(date);
-                } catch (DateTimeParseException e) {
-                    // Log error and continue without setting date
-                    System.err.println("Failed to parse publication date: " + dto.getPublicationDate());
-                }
-            }
+            // Publication date is set automatically by the service
             
             articleService.createArticle(article, dto.getMainAuthorId(), dto.getCoauthorIds());
             
