@@ -67,8 +67,6 @@ INSERT INTO articles (title, description, external_link, publication_date, main_
 
 -- Соавторы для статей
 INSERT INTO article_coauthors (article_id, coauthor_id) VALUES
-(1, 2),  -- Статья 1: соавтор employee 2
-(1, 3),  -- Статья 1: соавтор employee 3
 (2, 3),  -- Статья 2: соавтор employee 3
 (3, 1),  -- Статья 3: соавтор employee 1
 (4, 2);  -- Статья 4: соавтор employee 2

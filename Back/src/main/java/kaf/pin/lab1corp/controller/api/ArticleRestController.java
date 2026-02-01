@@ -84,13 +84,16 @@ public class ArticleRestController {
             return ResponseEntity.notFound().build();
         }
     }
-    
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteArticle(@PathVariable Long id) {
+        System.out.println("SERVER: DELETE /api/articles/" + id + " called");
         try {
             articleService.deleteArticle(id);
+            System.out.println("SERVER: Article " + id + " deleted successfully");
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
+            System.out.println("SERVER: Error deleting article " + id + ": " + e.getMessage());
             return ResponseEntity.notFound().build();
         }
     }
