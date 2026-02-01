@@ -50,8 +50,7 @@ class ProfileFragment : Fragment() {
     }
     
     private val teamViewModel: ResearchTeamViewModel by viewModels {
-        val apiService = RetrofitClient.getApiService { preferencesManager.getToken() }
-        ResearchTeamViewModelFactory(ResearchTeamRepository(apiService))
+        ResearchTeamViewModelFactory(requireContext())
     }
     
     override fun onCreateView(
