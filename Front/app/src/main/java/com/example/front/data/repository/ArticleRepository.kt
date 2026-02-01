@@ -45,10 +45,17 @@ class ArticleRepository(private val apiService: ApiService) {
     
     suspend fun createArticle(request: ArticleCreateRequest): Resource<Article> {
         return try {
+            android.util.Log.d("ArticleRepository", "Creating article with request: $request")
             val response = apiService.createArticle(request)
+            android.util.Log.d("ArticleRepository", "Article created successfully: ${response.id}")
             Resource.Success(response)
+        } catch (e: retrofit2.HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            android.util.Log.e("ArticleRepository", "HTTP Error creating article: ${e.code()} - $errorBody", e)
+            Resource.Error("Ошибка создания статьи: ${e.code()} - ${errorBody ?: e.message()}")
         } catch (e: Exception) {
-            Resource.Error(e.message ?: "Ошибка создания статьи")
+            android.util.Log.e("ArticleRepository", "Error creating article", e)
+            Resource.Error("Ошибка создания статьи: ${e.message}")
         }
     }
     

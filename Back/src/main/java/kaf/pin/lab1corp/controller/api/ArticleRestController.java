@@ -52,6 +52,13 @@ public class ArticleRestController {
     @PostMapping
     public ResponseEntity<Article> createArticle(@Valid @RequestBody ArticleCreateDTO dto) {
         try {
+            System.out.println("SERVER: Creating article with data: " + dto);
+            System.out.println("  Title: " + dto.getTitle());
+            System.out.println("  Description: " + dto.getDescription());
+            System.out.println("  Publication Date: " + dto.getPublicationDate());
+            System.out.println("  Main Author ID: " + dto.getMainAuthorId());
+            System.out.println("  Coauthor IDs: " + dto.getCoauthorIds());
+            
             Article article = new Article();
             article.setTitle(dto.getTitle());
             article.setDescription(dto.getDescription());
@@ -62,9 +69,10 @@ public class ArticleRestController {
                 try {
                     LocalDate date = LocalDate.parse(dto.getPublicationDate(), DateTimeFormatter.ISO_LOCAL_DATE);
                     article.setPublicationDate(date);
+                    System.out.println("  Parsed publication date: " + date);
                 } catch (DateTimeParseException e) {
                     // Log error and continue without setting date
-                    System.err.println("Failed to parse publication date: " + dto.getPublicationDate());
+                    System.err.println("Failed to parse publication date: " + dto.getPublicationDate() + ", error: " + e.getMessage());
                 }
             }
             
@@ -74,8 +82,11 @@ public class ArticleRestController {
                 dto.getCoauthorIds()
             );
             
+            System.out.println("SERVER: Article created successfully with ID: " + savedArticle.getId());
             return ResponseEntity.status(HttpStatus.CREATED).body(savedArticle);
         } catch (Exception e) {
+            System.err.println("SERVER: Error creating article: " + e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }

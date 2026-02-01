@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.front.R
 import com.example.front.data.api.RetrofitClient
 import com.example.front.data.local.PreferencesManager
@@ -16,6 +17,7 @@ import com.example.front.data.repository.ResearchTeamRepository
 import com.example.front.databinding.FragmentProfileTabBinding
 import com.example.front.util.Resource
 import com.google.android.material.card.MaterialCardView
+import kotlinx.coroutines.launch
 
 class ProfileTeamsTabFragment : Fragment() {
 
@@ -58,45 +60,49 @@ class ProfileTeamsTabFragment : Fragment() {
     }
 
     private fun loadTeams() {
-        viewModel.getEmployeeResearchTeams(employeeId)
+        if (employeeId != -1L) {
+            viewModel.refreshEmployeeResearchTeams(employeeId)
+        }
     }
 
     private fun observeTeams() {
-        viewModel.myTeams.observe(viewLifecycleOwner) { resource ->
-            when (resource) {
-                is Resource.Loading -> {
-                    binding.progressBar.visibility = View.VISIBLE
-                    binding.contentContainer.visibility = View.GONE
-                    binding.tvEmptyState.visibility = View.GONE
-                }
-                is Resource.Success -> {
-                    binding.progressBar.visibility = View.GONE
-
-                    val teams = resource.data ?: emptyList()
-                    if (teams.isEmpty()) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.myTeams.collect { resource ->
+                when (resource) {
+                    is Resource.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
                         binding.contentContainer.visibility = View.GONE
-                        binding.tvEmptyState.visibility = View.VISIBLE
-                        binding.tvEmptyState.text = "Нет коллективов"
-                    } else {
-                        binding.contentContainer.visibility = View.VISIBLE
                         binding.tvEmptyState.visibility = View.GONE
+                    }
+                    is Resource.Success -> {
+                        binding.progressBar.visibility = View.GONE
 
-                        binding.contentContainer.removeAllViews()
+                        val teams = resource.data ?: emptyList()
+                        if (teams.isEmpty()) {
+                            binding.contentContainer.visibility = View.GONE
+                            binding.tvEmptyState.visibility = View.VISIBLE
+                            binding.tvEmptyState.text = "Нет коллективов"
+                        } else {
+                            binding.contentContainer.visibility = View.VISIBLE
+                            binding.tvEmptyState.visibility = View.GONE
 
-                        teams.forEach { team ->
-                            addTeamCard(
-                                teamName = team.name,
-                                leaderName = team.leader?.name ?: "Не указан",
-                                description = team.description ?: "Описание отсутствует"
-                            )
+                            binding.contentContainer.removeAllViews()
+
+                            teams.forEach { team ->
+                                addTeamCard(
+                                    teamName = team.name,
+                                    leaderName = team.leader?.name ?: "Не указан",
+                                    description = team.description ?: "Описание отсутствует"
+                                )
+                            }
                         }
                     }
-                }
-                is Resource.Error -> {
-                    binding.progressBar.visibility = View.GONE
-                    binding.contentContainer.visibility = View.GONE
-                    binding.tvEmptyState.visibility = View.VISIBLE
-                    binding.tvEmptyState.text = resource.message ?: "Ошибка загрузки коллективов"
+                    is Resource.Error -> {
+                        binding.progressBar.visibility = View.GONE
+                        binding.contentContainer.visibility = View.GONE
+                        binding.tvEmptyState.visibility = View.VISIBLE
+                        binding.tvEmptyState.text = resource.message ?: "Ошибка загрузки коллективов"
+                    }
                 }
             }
         }

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.front.data.api.RetrofitClient
 import com.example.front.data.local.PreferencesManager
@@ -16,6 +17,7 @@ import com.example.front.databinding.FragmentProfileBinding
 import com.example.front.util.Resource
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.launch
 
 class ProfileFragment : Fragment() {
     
@@ -64,7 +66,7 @@ class ProfileFragment : Fragment() {
                 // Refresh articles list
                 val employeeId = preferencesManager.getEmployeeId()
                 if (employeeId != -1L) {
-                    viewModel.getEmployeeArticlesAsAuthor(employeeId)
+                    viewModel.refreshEmployeeArticlesAsAuthor(employeeId)
                     Snackbar.make(
                         binding.root,
                         "Статья успешно создана",
@@ -81,7 +83,7 @@ class ProfileFragment : Fragment() {
                 // Refresh teams list
                 val employeeId = preferencesManager.getEmployeeId()
                 if (employeeId != -1L) {
-                    viewModel.getEmployeeResearchTeams(employeeId)
+                    viewModel.refreshEmployeeResearchTeams(employeeId)
                     Snackbar.make(
                         binding.root,
                         "Научный коллектив успешно создан",
@@ -125,30 +127,42 @@ class ProfileFragment : Fragment() {
             return
         }
         
-        // Load employee data
+        // Load all data centrally before setting up ViewPager
         viewModel.getCurrentEmployee(employeeId)
+        viewModel.getEmployeeArticlesAsAuthor(employeeId)
+        viewModel.getEmployeeArticlesAsCoauthor(employeeId)
+        viewModel.getEmployeeResearchTeams(employeeId)
         
-        // Observe employee data
-        viewModel.currentEmployee.observe(viewLifecycleOwner) { resource ->
-            when (resource) {
-                is Resource.Loading -> {
-                    binding.progressBar.visibility = View.VISIBLE
-                }
-                is Resource.Success -> {
-                    binding.progressBar.visibility = View.GONE
-                    
-                    resource.data?.let { employee ->
-                        setupViewPager(employee.id)
+        // Observe employee data to know when to set up ViewPager
+        observeEmployee(employeeId)
+    }
+    
+    private fun observeEmployee(employeeId: Long) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.currentEmployee.collect { resource ->
+                when (resource) {
+                    is Resource.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
                     }
-                }
-                is Resource.Error -> {
-                    binding.progressBar.visibility = View.GONE
-                    
-                    Snackbar.make(
-                        binding.root,
-                        resource.message ?: "Ошибка загрузки профиля",
-                        Snackbar.LENGTH_LONG
-                    ).show()
+                    is Resource.Success -> {
+                        binding.progressBar.visibility = View.GONE
+                        
+                        resource.data?.let { employee ->
+                            // Set up ViewPager once employee data is loaded
+                            if (binding.viewPager.adapter == null) {
+                                setupViewPager(employee.id)
+                            }
+                        }
+                    }
+                    is Resource.Error -> {
+                        binding.progressBar.visibility = View.GONE
+                        
+                        Snackbar.make(
+                            binding.root,
+                            resource.message ?: "Ошибка загрузки профиля",
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
                 }
             }
         }

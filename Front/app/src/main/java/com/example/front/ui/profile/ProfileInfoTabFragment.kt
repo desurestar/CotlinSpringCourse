@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.front.R
 import com.example.front.data.api.RetrofitClient
 import com.example.front.data.local.PreferencesManager
@@ -16,6 +17,7 @@ import com.example.front.data.repository.ResearchTeamRepository
 import com.example.front.databinding.FragmentProfileTabBinding
 import com.example.front.util.Resource
 import com.google.android.material.card.MaterialCardView
+import kotlinx.coroutines.launch
 
 class ProfileInfoTabFragment : Fragment() {
 
@@ -54,53 +56,58 @@ class ProfileInfoTabFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Ensure data is loaded if not already available
-        if (viewModel.currentEmployee.value == null && employeeId != -1L) {
-            viewModel.getCurrentEmployee(employeeId)
+        if (employeeId != -1L) {
+            viewModel.refreshCurrentEmployee(employeeId)
         }
         
         observeEmployee()
     }
 
     private fun observeEmployee() {
-        viewModel.currentEmployee.observe(viewLifecycleOwner) { resource ->
-            when (resource) {
-                is Resource.Loading -> {
-                    binding.progressBar.visibility = View.VISIBLE
-                    binding.contentContainer.visibility = View.GONE
-                }
-                is Resource.Success -> {
-                    binding.progressBar.visibility = View.GONE
-                    binding.contentContainer.visibility = View.VISIBLE
-
-                    resource.data?.let { employee ->
-                        binding.contentContainer.removeAllViews()
-
-                        // Name Card
-                        addInfoCard("Имя", employee.name)
-
-                        // Email Card
-                        employee.user?.email?.let { email ->
-                            addInfoCard("Email", email)
-                        }
-
-                        // Post Card
-                        employee.post?.let { post ->
-                            addInfoCard("Должность", post.postName)
-                        }
-
-                        // Department Card
-                        employee.department?.let { department ->
-                            addInfoCard("Кафедра", department.departmentName)
-                        }
-
-                        // ID Card
-                        addInfoCard("ID сотрудника", employee.id.toString())
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.currentEmployee.collect { resource ->
+                when (resource) {
+                    is Resource.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
+                        binding.contentContainer.visibility = View.GONE
+                        binding.tvEmptyState.visibility = View.GONE
                     }
-                }
-                is Resource.Error -> {
-                    binding.progressBar.visibility = View.GONE
-                    binding.tvEmptyState.visibility = View.VISIBLE
-                    binding.tvEmptyState.text = resource.message ?: "Ошибка загрузки данных"
+                    is Resource.Success -> {
+                        binding.progressBar.visibility = View.GONE
+                        binding.tvEmptyState.visibility = View.GONE
+                        binding.contentContainer.visibility = View.VISIBLE
+
+                        resource.data?.let { employee ->
+                            binding.contentContainer.removeAllViews()
+
+                            // Name Card
+                            addInfoCard("Имя", employee.name)
+
+                            // Email Card
+                            employee.user?.email?.let { email ->
+                                addInfoCard("Email", email)
+                            }
+
+                            // Post Card
+                            employee.post?.let { post ->
+                                addInfoCard("Должность", post.postName)
+                            }
+
+                            // Department Card
+                            employee.department?.let { department ->
+                                addInfoCard("Кафедра", department.departmentName)
+                            }
+
+                            // ID Card
+                            addInfoCard("ID сотрудника", employee.id.toString())
+                        }
+                    }
+                    is Resource.Error -> {
+                        binding.progressBar.visibility = View.GONE
+                        binding.contentContainer.visibility = View.GONE
+                        binding.tvEmptyState.visibility = View.VISIBLE
+                        binding.tvEmptyState.text = resource.message ?: "Ошибка загрузки данных"
+                    }
                 }
             }
         }

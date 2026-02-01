@@ -75,6 +75,42 @@ class CreateArticleDialog : DialogFragment() {
             return
         }
 
+        // Validate date format if provided
+        if (publicationDate.isNotEmpty()) {
+            // Check if date matches yyyy-MM-dd format
+            val datePattern = Regex("""^\d{4}-\d{2}-\d{2}$""")
+            if (!datePattern.matches(publicationDate)) {
+                binding.etPublicationDate.error = "Формат даты должен быть yyyy-MM-dd (например, 2024-01-15)"
+                return
+            }
+            
+            // Validate date values
+            try {
+                val parts = publicationDate.split("-")
+                val year = parts[0].toInt()
+                val month = parts[1].toInt()
+                val day = parts[2].toInt()
+                
+                if (year < 1900 || year > 2100) {
+                    binding.etPublicationDate.error = "Год должен быть между 1900 и 2100"
+                    return
+                }
+                
+                if (month < 1 || month > 12) {
+                    binding.etPublicationDate.error = "Месяц должен быть между 01 и 12"
+                    return
+                }
+                
+                if (day < 1 || day > 31) {
+                    binding.etPublicationDate.error = "День должен быть между 01 и 31"
+                    return
+                }
+            } catch (e: Exception) {
+                binding.etPublicationDate.error = "Некорректная дата"
+                return
+            }
+        }
+
         // Get current employee ID as main author
         val preferencesManager = PreferencesManager(requireContext())
         val mainAuthorId = preferencesManager.getEmployeeId()
@@ -94,7 +130,7 @@ class CreateArticleDialog : DialogFragment() {
             .mapNotNull { it.trim().toLongOrNull() }
             .takeIf { it.isNotEmpty() }
 
-        // Create article
+        // Create article with validated date
         val request = ArticleCreateRequest(
             title = title,
             description = description,
@@ -104,6 +140,7 @@ class CreateArticleDialog : DialogFragment() {
             coauthorIds = coauthorIds
         )
 
+        android.util.Log.d("CreateArticleDialog", "Creating article with request: $request")
         viewModel.createArticle(request)
     }
 
