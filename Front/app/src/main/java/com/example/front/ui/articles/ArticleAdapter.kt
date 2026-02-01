@@ -59,7 +59,7 @@ class ArticleAdapter(
             binding.apply {
                 tvArticleTitle.text = article.title
                 tvArticleDescription.text = article.description
-                tvMainAuthor.text = "Автор: ${article.mainAuthor.name}"
+                tvMainAuthor.text = "Автор: ${article.mainAuthor!!.name}"
                 
                 // Format publication date
                 article.publicationDate?.let { date ->

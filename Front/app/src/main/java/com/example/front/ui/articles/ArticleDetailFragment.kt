@@ -77,7 +77,7 @@ class ArticleDetailFragment : Fragment() {
                             tvDescription.text = article.description
 
                             // Main author
-                            tvMainAuthor.text = article. mainAuthor.name
+                            tvMainAuthor.text = article. mainAuthor!!.name
                             // ИСПРАВЛЕНИЕ: используем departmentName вместо name
                             tvMainAuthorDepartment.text = article.mainAuthor.department?.departmentName
                                 ?: "Кафедра не указана"

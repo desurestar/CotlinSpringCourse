@@ -48,14 +48,17 @@ class ArticleListFragment : Fragment() {
         // Load articles on start
         viewModel.getAllArticles()
     }
-    
+
     private fun setupRecyclerView() {
-        articleAdapter = ArticleAdapter { article ->
-            val action = ArticleListFragmentDirections
-                .actionArticleListToArticleDetail(article.id)
-            findNavController().navigate(action)
-        }
-        
+        articleAdapter = ArticleAdapter(
+            onItemClick = { article ->
+                val action = ArticleListFragmentDirections
+                    .actionArticleListToArticleDetail(article.id)
+                findNavController().navigate(action)
+            }
+            // onDeleteClick не передаем, будет использоваться значение по умолчанию null
+        )
+
         binding.rvArticles.apply {
             adapter = articleAdapter
             layoutManager = LinearLayoutManager(requireContext())
