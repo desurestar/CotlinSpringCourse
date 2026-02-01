@@ -18,8 +18,6 @@ public class ArticleCreateDTO {
     @Size(max = 500, message = "Ссылка не может превышать 500 символов")
     private String externalLink;
     
-    private String publicationDate;
-    
     @NotNull(message = "Основной автор обязателен")
     private Long mainAuthorId;
     
@@ -34,9 +32,6 @@ public class ArticleCreateDTO {
     
     public String getExternalLink() { return externalLink; }
     public void setExternalLink(String externalLink) { this.externalLink = externalLink; }
-    
-    public String getPublicationDate() { return publicationDate; }
-    public void setPublicationDate(String publicationDate) { this.publicationDate = publicationDate; }
     
     public Long getMainAuthorId() { return mainAuthorId; }
     public void setMainAuthorId(Long mainAuthorId) { this.mainAuthorId = mainAuthorId; }
