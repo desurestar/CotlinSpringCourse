@@ -1,7 +1,11 @@
 package kaf.pin.lab1corp.DTO.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class PostResponse {
     private Long id;
+    
+    @JsonProperty("post_name")
     private String postName;
 
     public PostResponse() {}
