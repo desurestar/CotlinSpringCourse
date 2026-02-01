@@ -304,7 +304,7 @@ class ProfileFragment : Fragment() {
         
         // Update message for non-employee users
         val textView = binding.guestCard.findViewById<android.widget.TextView>(
-            com.google.android.R.id.text1
+            R.id.tvGuestMessage
         )
         textView?.text = "Профиль доступен только для сотрудников"
     }
