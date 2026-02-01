@@ -104,8 +104,8 @@ class ProfileTabFragment : Fragment() {
         
         // Add info cards
         addInfoCard(layoutInflater, "Имя", employee.name)
-        addInfoCard(layoutInflater, "Должность", employee.post?.name ?: "Не указана")
-        addInfoCard(layoutInflater, "Кафедра", employee.department?.name ?: "Не указана")
+        addInfoCard(layoutInflater, "Должность", employee.post?.postName ?: "Не указана")
+        addInfoCard(layoutInflater, "Кафедра", employee.department?.departmentName ?: "Не указана")
         employee.user?.let { user ->
             addInfoCard(layoutInflater, "Email", user.email)
             addInfoCard(layoutInflater, "Роль", user.role)
