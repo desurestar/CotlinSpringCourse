@@ -6,15 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.front.data.api.RetrofitClient
 import com.example.front.data.local.PreferencesManager
 import com.example.front.data.model.ArticleCreateRequest
+import com.example.front.data.model.Employee
 import com.example.front.data.repository.ArticleRepository
 import com.example.front.data.repository.EmployeeRepository
 import com.example.front.data.repository.ResearchTeamRepository
 import com.example.front.databinding.DialogCreateArticleBinding
 import com.example.front.util.Resource
+import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 
 class CreateArticleDialog : DialogFragment() {
 
@@ -31,7 +35,15 @@ class CreateArticleDialog : DialogFragment() {
         )
     }
 
+    private val employeeRepository by lazy {
+        val preferencesManager = PreferencesManager(requireContext())
+        val apiService = RetrofitClient.getApiService { preferencesManager.getToken() }
+        EmployeeRepository(apiService)
+    }
+
     private var onArticleCreated: (() -> Unit)? = null
+    private var employees: List<Employee> = emptyList()
+    private val selectedCoauthorIds = mutableSetOf<Long>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,6 +58,50 @@ class CreateArticleDialog : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupDialog()
+        loadEmployees()
+    }
+
+    private fun loadEmployees() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val result = employeeRepository.getEmployees()
+                when (result) {
+                    is Resource.Success -> {
+                        employees = result.data ?: emptyList()
+                        setupCoauthorChips()
+                    }
+                    is Resource.Error -> {
+                        // Continue without employee selection
+                        android.util.Log.e("CreateArticleDialog", "Error loading employees: ${result.message}")
+                    }
+                    is Resource.Loading -> {}
+                }
+            } catch (e: Exception) {
+                android.util.Log.e("CreateArticleDialog", "Exception loading employees", e)
+            }
+        }
+    }
+
+    private fun setupCoauthorChips() {
+        val currentEmployeeId = PreferencesManager(requireContext()).getEmployeeId()
+        
+        // Filter out current user from coauthor selection
+        val availableEmployees = employees.filter { it.id != currentEmployeeId }
+        
+        availableEmployees.forEach { employee ->
+            val chip = Chip(requireContext()).apply {
+                text = employee.name
+                isCheckable = true
+                setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        selectedCoauthorIds.add(employee.id)
+                    } else {
+                        selectedCoauthorIds.remove(employee.id)
+                    }
+                }
+            }
+            binding.chipGroupCoauthors.addView(chip)
+        }
     }
 
     private fun setupDialog() {
@@ -62,7 +118,6 @@ class CreateArticleDialog : DialogFragment() {
         val title = binding.etTitle.text.toString().trim()
         val description = binding.etDescription.text.toString().trim()
         val externalLink = binding.etExternalLink.text.toString().trim()
-        val publicationDate = binding.etPublicationDate.text.toString().trim()
 
         // Validation
         if (title.isEmpty()) {
@@ -73,42 +128,6 @@ class CreateArticleDialog : DialogFragment() {
         if (description.isEmpty()) {
             binding.etDescription.error = "Введите описание"
             return
-        }
-
-        // Validate date format if provided
-        if (publicationDate.isNotEmpty()) {
-            // Check if date matches yyyy-MM-dd format
-            val datePattern = Regex("""^\d{4}-\d{2}-\d{2}$""")
-            if (!datePattern.matches(publicationDate)) {
-                binding.etPublicationDate.error = "Формат даты должен быть yyyy-MM-dd (например, 2024-01-15)"
-                return
-            }
-            
-            // Validate date values
-            try {
-                val parts = publicationDate.split("-")
-                val year = parts[0].toInt()
-                val month = parts[1].toInt()
-                val day = parts[2].toInt()
-                
-                if (year < 1900 || year > 2100) {
-                    binding.etPublicationDate.error = "Год должен быть между 1900 и 2100"
-                    return
-                }
-                
-                if (month < 1 || month > 12) {
-                    binding.etPublicationDate.error = "Месяц должен быть между 01 и 12"
-                    return
-                }
-                
-                if (day < 1 || day > 31) {
-                    binding.etPublicationDate.error = "День должен быть между 01 и 31"
-                    return
-                }
-            } catch (e: Exception) {
-                binding.etPublicationDate.error = "Некорректная дата"
-                return
-            }
         }
 
         // Get current employee ID as main author
@@ -124,20 +143,21 @@ class CreateArticleDialog : DialogFragment() {
         binding.progressBar.visibility = View.VISIBLE
         binding.btnCreate.isEnabled = false
 
-        // Parse coauthor IDs if provided
-        val coauthorIds = binding.etCoauthorIds.text.toString()
+        // Parse coauthor IDs from text field if chips weren't used
+        val manualCoauthorIds = binding.etCoauthorIds.text.toString()
             .split(",")
             .mapNotNull { it.trim().toLongOrNull() }
-            .takeIf { it.isNotEmpty() }
+        
+        // Combine selected chips and manual IDs
+        val allCoauthorIds = (selectedCoauthorIds + manualCoauthorIds).toList().takeIf { it.isNotEmpty() }
 
-        // Create article with validated date
+        // Create article without publication date (server will set it automatically)
         val request = ArticleCreateRequest(
             title = title,
             description = description,
             externalLink = externalLink.takeIf { it.isNotEmpty() },
-            publicationDate = publicationDate.takeIf { it.isNotEmpty() },
             mainAuthorId = mainAuthorId,
-            coauthorIds = coauthorIds
+            coauthorIds = allCoauthorIds
         )
 
         android.util.Log.d("CreateArticleDialog", "Creating article with request: $request")

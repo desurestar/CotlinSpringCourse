@@ -18,7 +18,6 @@ data class ArticleCreateRequest(
     val title: String,
     val description: String,
     val externalLink: String?,
-    val publicationDate: String?,
     val mainAuthorId: Long,
     val coauthorIds: List<Long>?
 )
