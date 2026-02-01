@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.example.front.R
 import com.example.front.data.api.RetrofitClient
 import com.example.front.data.local.PreferencesManager
@@ -230,7 +232,7 @@ class ProfileTabFragment : Fragment() {
     }
     
     private fun setupRecyclerView(listAdapter: RecyclerView.Adapter<*>) {
-        val recyclerView = androidx.recyclerview.widget.RecyclerView(requireContext())
+        val recyclerView = RecyclerView(requireContext())
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = listAdapter
         
