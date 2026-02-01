@@ -94,10 +94,11 @@ class ProfileArticlesTabFragment : Fragment() {
                     .actionProfileFragmentToArticleDetail(article.id)
                 findNavController().navigate(action)
             },
-            onDeleteClick = if (isMainAuthor) { article ->
-                // Only allow deletion for main author
-                showDeleteConfirmationDialog(article)
-            } else null
+            onDeleteClick = if (isMainAuthor) {
+                { article -> showDeleteConfirmationDialog(article) }
+            } else {
+                null
+            }
         )
         
         // Clear the container and add RecyclerView

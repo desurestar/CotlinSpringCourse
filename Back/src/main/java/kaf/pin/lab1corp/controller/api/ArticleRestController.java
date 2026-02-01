@@ -63,8 +63,8 @@ public class ArticleRestController {
                     LocalDate date = LocalDate.parse(dto.getPublicationDate(), DateTimeFormatter.ISO_LOCAL_DATE);
                     article.setPublicationDate(date);
                 } catch (DateTimeParseException e) {
-                    // If parsing fails, try without time formatter (already in correct format)
-                    article.setPublicationDate(LocalDate.parse(dto.getPublicationDate()));
+                    // Log error and continue without setting date
+                    System.err.println("Failed to parse publication date: " + dto.getPublicationDate());
                 }
             }
             
@@ -96,8 +96,8 @@ public class ArticleRestController {
                     LocalDate date = LocalDate.parse(dto.getPublicationDate(), DateTimeFormatter.ISO_LOCAL_DATE);
                     article.setPublicationDate(date);
                 } catch (DateTimeParseException e) {
-                    // If parsing fails, try without time formatter (already in correct format)
-                    article.setPublicationDate(LocalDate.parse(dto.getPublicationDate()));
+                    // Log error and continue without setting date
+                    System.err.println("Failed to parse publication date: " + dto.getPublicationDate());
                 }
             }
             
