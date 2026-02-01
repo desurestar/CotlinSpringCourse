@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.front.data.api.RetrofitClient
@@ -17,6 +18,7 @@ import com.example.front.databinding.FragmentProfileTabBinding
 import com.example.front.ui.articles.ArticleAdapter
 import com.example.front.util.Resource
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 
 class ProfileArticlesTabFragment : Fragment() {
     
@@ -117,46 +119,50 @@ class ProfileArticlesTabFragment : Fragment() {
     }
     
     private fun loadArticles() {
-        if (isMainAuthor) {
-            viewModel.getEmployeeArticlesAsAuthor(employeeId)
-        } else {
-            viewModel.getEmployeeArticlesAsCoauthor(employeeId)
+        if (employeeId != -1L) {
+            if (isMainAuthor) {
+                viewModel.refreshEmployeeArticlesAsAuthor(employeeId)
+            } else {
+                viewModel.refreshEmployeeArticlesAsCoauthor(employeeId)
+            }
         }
     }
     
     private fun observeArticles() {
-        val articlesLiveData = if (isMainAuthor) {
+        val articlesFlow = if (isMainAuthor) {
             viewModel.myArticles
         } else {
             viewModel.coauthoredArticles
         }
         
-        articlesLiveData.observe(viewLifecycleOwner) { resource ->
-            when (resource) {
-                is Resource.Loading -> {
-                    binding.progressBar.visibility = View.VISIBLE
-                    binding.contentContainer.visibility = View.GONE
-                    binding.tvEmptyState.visibility = View.GONE
-                }
-                is Resource.Success -> {
-                    binding.progressBar.visibility = View.GONE
-                    
-                    val articles = resource.data ?: emptyList()
-                    if (articles.isEmpty()) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            articlesFlow.collect { resource ->
+                when (resource) {
+                    is Resource.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
+                        binding.contentContainer.visibility = View.GONE
+                        binding.tvEmptyState.visibility = View.GONE
+                    }
+                    is Resource.Success -> {
+                        binding.progressBar.visibility = View.GONE
+                        
+                        val articles = resource.data ?: emptyList()
+                        if (articles.isEmpty()) {
+                            binding.contentContainer.visibility = View.GONE
+                            binding.tvEmptyState.visibility = View.VISIBLE
+                            binding.tvEmptyState.text = "Нет статей"
+                        } else {
+                            binding.contentContainer.visibility = View.VISIBLE
+                            binding.tvEmptyState.visibility = View.GONE
+                            articleAdapter.submitList(articles)
+                        }
+                    }
+                    is Resource.Error -> {
+                        binding.progressBar.visibility = View.GONE
                         binding.contentContainer.visibility = View.GONE
                         binding.tvEmptyState.visibility = View.VISIBLE
-                        binding.tvEmptyState.text = "Нет статей"
-                    } else {
-                        binding.contentContainer.visibility = View.VISIBLE
-                        binding.tvEmptyState.visibility = View.GONE
-                        articleAdapter.submitList(articles)
+                        binding.tvEmptyState.text = resource.message ?: "Ошибка загрузки статей"
                     }
-                }
-                is Resource.Error -> {
-                    binding.progressBar.visibility = View.GONE
-                    binding.contentContainer.visibility = View.GONE
-                    binding.tvEmptyState.visibility = View.VISIBLE
-                    binding.tvEmptyState.text = resource.message ?: "Ошибка загрузки статей"
                 }
             }
         }
@@ -185,7 +191,7 @@ class ProfileArticlesTabFragment : Fragment() {
                         "Статья успешно удалена",
                         Snackbar.LENGTH_SHORT
                     ).show()
-                    // Reload articles list
+                    // Reload articles list after successful deletion
                     loadArticles()
                 }
                 is Resource.Error -> {

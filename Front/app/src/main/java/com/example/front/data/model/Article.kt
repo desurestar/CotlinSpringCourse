@@ -8,9 +8,11 @@ data class Article(
     val publicationDate: String?,
     val createdAt: String?,
     val updatedAt: String?,
-    val mainAuthor: Employee,
+    val mainAuthor: Employee?,
     val coauthors: List<Employee>?
-)
+) {
+    fun getAuthorName(): String = mainAuthor?.name ?: "Автор не указан"
+}
 
 data class ArticleCreateRequest(
     val title: String,

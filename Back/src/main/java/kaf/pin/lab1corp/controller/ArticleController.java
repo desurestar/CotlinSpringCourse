@@ -10,6 +10,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 @Controller
 @RequestMapping("/articles")
 public class ArticleController {
@@ -33,7 +37,17 @@ public class ArticleController {
             article.setTitle(dto.getTitle());
             article.setDescription(dto.getDescription());
             article.setExternalLink(dto.getExternalLink());
-            article.setPublicationDate(dto.getPublicationDate());
+            
+            // Parse publication date from string
+            if (dto.getPublicationDate() != null && !dto.getPublicationDate().isEmpty()) {
+                try {
+                    LocalDate date = LocalDate.parse(dto.getPublicationDate(), DateTimeFormatter.ISO_LOCAL_DATE);
+                    article.setPublicationDate(date);
+                } catch (DateTimeParseException e) {
+                    // Log error and continue without setting date
+                    System.err.println("Failed to parse publication date: " + dto.getPublicationDate());
+                }
+            }
             
             articleService.createArticle(article, dto.getMainAuthorId(), dto.getCoauthorIds());
             

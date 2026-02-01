@@ -240,4 +240,32 @@ public class ResearchTeamService {
     public ResearchTeam saveTeam(ResearchTeam team) {
         return researchTeamRepository.save(team);
     }
+
+    /**
+     * Get all teams where the employee is a leader or member
+     */
+    public List<ResearchTeam> getTeamsByEmployee(Long employeeId) {
+        if (employeeId == null) {
+            throw new BadRequestException("Employee ID is required");
+        }
+        
+        // Get all teams
+        List<ResearchTeam> allTeams = (List<ResearchTeam>) researchTeamRepository.findAll();
+        
+        // Filter teams where employee is leader or member
+        return allTeams.stream()
+            .filter(team -> {
+                // Check if employee is the leader
+                if (team.getLeader() != null && team.getLeader().getId().equals(employeeId)) {
+                    return true;
+                }
+                
+                // Check if employee is a member
+                List<TeamMember> members = teamMemberRepository.findByTeamId(team.getId());
+                return members.stream()
+                    .anyMatch(member -> member.getEmployee() != null && 
+                                       member.getEmployee().getId().equals(employeeId));
+            })
+            .collect(java.util.stream.Collectors.toList());
+    }
 }

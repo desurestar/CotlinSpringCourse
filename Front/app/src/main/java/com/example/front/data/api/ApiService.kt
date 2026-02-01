@@ -99,6 +99,9 @@ interface ApiService {
     @GET("api/research-teams/{id}")
     suspend fun getResearchTeamById(@Path("id") id: Long): ResearchTeam
     
+    @GET("api/research-teams/employee/{employeeId}")
+    suspend fun getTeamsByEmployee(@Path("employeeId") employeeId: Long): List<ResearchTeam>
+    
     @GET("api/research-teams/leader/{leaderId}")
     suspend fun getTeamsByLeader(@Path("leaderId") leaderId: Long): List<ResearchTeam>
     

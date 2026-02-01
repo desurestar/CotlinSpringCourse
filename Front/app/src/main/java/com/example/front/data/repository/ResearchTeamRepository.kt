@@ -81,4 +81,13 @@ class ResearchTeamRepository(private val apiService: ApiService) {
             Resource.Error(e.message ?: "Ошибка создания работы")
         }
     }
+    
+    suspend fun getTeamsByEmployee(employeeId: Long): Resource<List<ResearchTeam>> {
+        return try {
+            val response = apiService.getTeamsByEmployee(employeeId)
+            Resource.Success(response)
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "Ошибка загрузки коллективов сотрудника")
+        }
+    }
 }

@@ -65,6 +65,22 @@ public class ResearchTeamRestController {
         }
     }
 
+    @GetMapping("/employee/{employeeId}")
+    public ResponseEntity<List<ResearchTeamResponse>> getTeamsByEmployee(@PathVariable Long employeeId) {
+        try {
+            List<ResearchTeam> teams = researchTeamService.getTeamsByEmployee(employeeId);
+            List<ResearchTeamResponse> response = teams.stream()
+                .map(this::convertToResponse)
+                .collect(Collectors.toList());
+            return ResponseEntity.ok(response);
+        } catch (BadRequestException e) {
+            throw e;
+        } catch (Exception e) {
+            logger.error("Error fetching teams for employee: " + employeeId, e);
+            throw new BadRequestException("Failed to fetch teams for employee: " + e.getMessage());
+        }
+    }
+
     @PostMapping
     public ResponseEntity<ResearchTeamResponse> createTeam(@RequestBody Map<String, Object> request) {
         try {
