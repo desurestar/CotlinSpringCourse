@@ -229,10 +229,10 @@ class ProfileTabFragment : Fragment() {
         }
     }
     
-    private fun setupRecyclerView(adapter: RecyclerView.Adapter<*>) {
+    private fun setupRecyclerView(listAdapter: RecyclerView.Adapter<*>) {
         val recyclerView = androidx.recyclerview.widget.RecyclerView(requireContext())
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.adapter = adapter
+        recyclerView.adapter = listAdapter
         
         binding.contentContainer.removeAllViews()
         binding.contentContainer.addView(
@@ -305,7 +305,6 @@ class ProfileTabFragment : Fragment() {
     }
     
     private fun navigateToTeamDetail(teamId: Long) {
-        // Navigate to team detail - need to add navigation action
         val bundle = Bundle().apply {
             putLong("teamId", teamId)
         }
