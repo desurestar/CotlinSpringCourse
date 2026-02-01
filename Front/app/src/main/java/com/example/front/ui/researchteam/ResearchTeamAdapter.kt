@@ -31,7 +31,7 @@ class ResearchTeamAdapter(
 
         fun bind(team: ResearchTeam) {
             binding.tvTeamName.text = team.name
-            binding.tvLeader.text = "👤 Лидер: ${team.leader.name}"
+            binding.tvLeader.text = "👤 Лидер: ${team.leader?.name ?: "Не указан"}"
             
             val membersCount = team.members?.size ?: 0
             binding.tvMembersCount.text = "👥 $membersCount участников"

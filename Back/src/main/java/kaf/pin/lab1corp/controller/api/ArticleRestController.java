@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,7 +56,17 @@ public class ArticleRestController {
             article.setTitle(dto.getTitle());
             article.setDescription(dto.getDescription());
             article.setExternalLink(dto.getExternalLink());
-            article.setPublicationDate(dto.getPublicationDate());
+            
+            // Parse publication date from string
+            if (dto.getPublicationDate() != null && !dto.getPublicationDate().isEmpty()) {
+                try {
+                    LocalDate date = LocalDate.parse(dto.getPublicationDate(), DateTimeFormatter.ISO_LOCAL_DATE);
+                    article.setPublicationDate(date);
+                } catch (DateTimeParseException e) {
+                    // Log error and continue without setting date
+                    System.err.println("Failed to parse publication date: " + dto.getPublicationDate());
+                }
+            }
             
             Article savedArticle = articleService.createArticle(
                 article, 
@@ -76,7 +89,17 @@ public class ArticleRestController {
             article.setTitle(dto.getTitle());
             article.setDescription(dto.getDescription());
             article.setExternalLink(dto.getExternalLink());
-            article.setPublicationDate(dto.getPublicationDate());
+            
+            // Parse publication date from string
+            if (dto.getPublicationDate() != null && !dto.getPublicationDate().isEmpty()) {
+                try {
+                    LocalDate date = LocalDate.parse(dto.getPublicationDate(), DateTimeFormatter.ISO_LOCAL_DATE);
+                    article.setPublicationDate(date);
+                } catch (DateTimeParseException e) {
+                    // Log error and continue without setting date
+                    System.err.println("Failed to parse publication date: " + dto.getPublicationDate());
+                }
+            }
             
             Article updatedArticle = articleService.updateArticle(id, article, dto.getCoauthorIds());
             return ResponseEntity.ok(updatedArticle);

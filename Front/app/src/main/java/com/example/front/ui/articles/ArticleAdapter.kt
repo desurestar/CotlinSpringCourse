@@ -12,7 +12,8 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class ArticleAdapter(
-    private val onItemClick: (Article) -> Unit
+    private val onItemClick: (Article) -> Unit,
+    private val onDeleteClick: ((Article) -> Unit)? = null
 ) : ListAdapter<Article, ArticleAdapter.ArticleViewHolder>(ArticleDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
@@ -37,6 +38,19 @@ class ArticleAdapter(
                 val position = bindingAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     onItemClick(getItem(position))
+                }
+            }
+            
+            // Long press to delete (if delete callback is provided)
+            if (onDeleteClick != null) {
+                binding.root.setOnLongClickListener {
+                    val position = bindingAdapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        onDeleteClick.invoke(getItem(position))
+                        true
+                    } else {
+                        false
+                    }
                 }
             }
         }
