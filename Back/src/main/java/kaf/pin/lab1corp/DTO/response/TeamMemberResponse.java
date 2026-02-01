@@ -1,5 +1,6 @@
 package kaf.pin.lab1corp.DTO.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 
 public class TeamMemberResponse {
@@ -8,6 +9,7 @@ public class TeamMemberResponse {
     private EmployeeResponse employee;
     private StudentResponse student;
     private String role;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime joinedAt;
 
     public TeamMemberResponse() {}

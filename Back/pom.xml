@@ -81,6 +81,12 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- Jackson Java Time Module for proper date serialization -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>

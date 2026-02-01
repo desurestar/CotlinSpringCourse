@@ -1,5 +1,6 @@
 package kaf.pin.lab1corp.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,12 +25,15 @@ public class Article {
     private String externalLink;
     
     @Column(name = "publication_date")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate publicationDate;
     
     @Column(name = "created_at")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
     
     @Column(name = "updated_at")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime updatedAt;
     
     @ManyToOne(fetch = FetchType.EAGER)
