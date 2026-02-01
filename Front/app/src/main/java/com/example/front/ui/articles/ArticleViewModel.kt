@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.front.data.model.Article
+import com.example.front.data.model.ArticleCreateRequest
 import com.example.front.data.repository.ArticleRepository
 import com.example.front.util.Resource
 import kotlinx.coroutines.launch
@@ -18,6 +19,9 @@ class ArticleViewModel(
     
     private val _selectedArticle = MutableLiveData<Resource<Article>>()
     val selectedArticle: LiveData<Resource<Article>> = _selectedArticle
+    
+    private val _createArticleResult = MutableLiveData<Resource<Article>>()
+    val createArticleResult: LiveData<Resource<Article>> = _createArticleResult
     
     fun getAllArticles() {
         viewModelScope.launch {
@@ -41,6 +45,13 @@ class ArticleViewModel(
         viewModelScope.launch {
             _selectedArticle.value = Resource.Loading()
             _selectedArticle.value = articleRepository.getArticleById(id)
+        }
+    }
+    
+    fun createArticle(request: ArticleCreateRequest) {
+        viewModelScope.launch {
+            _createArticleResult.value = Resource.Loading()
+            _createArticleResult.value = articleRepository.createArticle(request)
         }
     }
 }

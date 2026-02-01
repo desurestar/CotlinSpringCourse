@@ -59,6 +59,9 @@
         <action
             android:id="@+id/action_profileFragment_to_articleDetail"
             app:destination="@id/articleDetailFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_teamDetail"
+            app:destination="@id/researchTeamDetailFragment" />
     </fragment>
 
     <fragment

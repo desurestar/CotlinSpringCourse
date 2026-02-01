@@ -89,6 +89,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvArticleDescription" />
 
+        <!-- Coauthors -->
+        <TextView
+            android:id="@+id/tvCoauthors"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvMainAuthor" />
+
         <!-- Publication Date -->
         <TextView
             android:id="@+id/tvPublicationDate"
@@ -109,7 +121,7 @@
             android:textSize="12sp"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvMainAuthor" />
+            app:layout_constraintTop_toBottomOf="@id/tvCoauthors" />
 
         <!-- Arrow -->
         <TextView

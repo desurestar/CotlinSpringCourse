@@ -19,8 +19,8 @@ class ResearchTeamViewModel(
     private val _teamDetail = MutableLiveData<Resource<ResearchTeam>>()
     val teamDetail: LiveData<Resource<ResearchTeam>> = _teamDetail
     
-    private val _createResult = MutableLiveData<Resource<ResearchTeam>>()
-    val createResult: LiveData<Resource<ResearchTeam>> = _createResult
+    private val _createTeamResult = MutableLiveData<Resource<ResearchTeam>>()
+    val createTeamResult: LiveData<Resource<ResearchTeam>> = _createTeamResult
     
     fun loadTeams() {
         viewModelScope.launch {
@@ -36,11 +36,10 @@ class ResearchTeamViewModel(
         }
     }
     
-    fun createTeam(name: String, description: String?, leaderId: Long) {
+    fun createTeam(request: ResearchTeamCreateRequest) {
         viewModelScope.launch {
-            _createResult.value = Resource.Loading()
-            val request = ResearchTeamCreateRequest(name, description, leaderId)
-            _createResult.value = repository.createTeam(request)
+            _createTeamResult.value = Resource.Loading()
+            _createTeamResult.value = repository.createTeam(request)
         }
     }
     
