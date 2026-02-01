@@ -62,6 +62,7 @@ class ProfileArticlesTabFragment : Fragment() {
         setupCreateButton()
         loadArticles()
         observeArticles()
+        observeArticleDeletion()
     }
     
     private fun setupCreateButton() {
@@ -87,11 +88,17 @@ class ProfileArticlesTabFragment : Fragment() {
     }
     
     private fun setupRecyclerView() {
-        articleAdapter = ArticleAdapter { article ->
-            val action = ProfileFragmentDirections
-                .actionProfileFragmentToArticleDetail(article.id)
-            findNavController().navigate(action)
-        }
+        articleAdapter = ArticleAdapter(
+            onItemClick = { article ->
+                val action = ProfileFragmentDirections
+                    .actionProfileFragmentToArticleDetail(article.id)
+                findNavController().navigate(action)
+            },
+            onDeleteClick = if (isMainAuthor) { article ->
+                // Only allow deletion for main author
+                showDeleteConfirmationDialog(article)
+            } else null
+        )
         
         // Clear the container and add RecyclerView
         binding.contentContainer.removeAllViews()
@@ -149,6 +156,43 @@ class ProfileArticlesTabFragment : Fragment() {
                     binding.contentContainer.visibility = View.GONE
                     binding.tvEmptyState.visibility = View.VISIBLE
                     binding.tvEmptyState.text = resource.message ?: "Ошибка загрузки статей"
+                }
+            }
+        }
+    }
+    
+    private fun showDeleteConfirmationDialog(article: com.example.front.data.model.Article) {
+        androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle("Удалить статью?")
+            .setMessage("Вы уверены, что хотите удалить статью \"${article.title}\"?")
+            .setPositiveButton("Удалить") { _, _ ->
+                viewModel.deleteArticle(article.id)
+            }
+            .setNegativeButton("Отмена", null)
+            .show()
+    }
+    
+    private fun observeArticleDeletion() {
+        viewModel.articleDeletionResult.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+                    // Could show a progress indicator
+                }
+                is Resource.Success -> {
+                    Snackbar.make(
+                        binding.root,
+                        "Статья успешно удалена",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                    // Reload articles list
+                    loadArticles()
+                }
+                is Resource.Error -> {
+                    Snackbar.make(
+                        binding.root,
+                        resource.message ?: "Ошибка удаления статьи",
+                        Snackbar.LENGTH_LONG
+                    ).show()
                 }
             }
         }

@@ -86,7 +86,7 @@ class ProfileTeamsTabFragment : Fragment() {
                         teams.forEach { team ->
                             addTeamCard(
                                 teamName = team.name,
-                                leaderName = team.leader.name,
+                                leaderName = team.leader?.name ?: "Не указан",
                                 description = team.description ?: "Описание отсутствует"
                             )
                         }

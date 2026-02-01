@@ -83,7 +83,7 @@ class ResearchTeamDetailFragment : Fragment() {
                     binding.progressBar.gone()
                     resource.data?.let { team ->
                         binding.tvTeamName.text = team.name
-                        binding.tvLeader.text = "👤 Лидер: ${team.leader.name}"
+                        binding.tvLeader.text = "👤 Лидер: ${team.leader?.name ?: "Не указан"}"
                         binding.tvDescription.text = team.description ?: "Нет описания"
                         
                         // Members

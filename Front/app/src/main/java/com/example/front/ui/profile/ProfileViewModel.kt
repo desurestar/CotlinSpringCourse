@@ -39,6 +39,9 @@ class ProfileViewModel(
     private val _articleCreationResult = MutableLiveData<Resource<Article>>()
     val articleCreationResult: LiveData<Resource<Article>> = _articleCreationResult
     
+    private val _articleDeletionResult = MutableLiveData<Resource<Unit>>()
+    val articleDeletionResult: LiveData<Resource<Unit>> = _articleDeletionResult
+    
     fun getCurrentEmployee(employeeId: Long) {
         viewModelScope.launch {
             _currentEmployee.value = Resource.Loading()
@@ -84,7 +87,7 @@ class ProfileViewModel(
             if (teamsResult is Resource.Success && teamsResult.data != null) {
                 // Filter teams where employeeId is a leader or member
                 val userTeams = teamsResult.data.filter { team ->
-                    team.leader.id == employeeId || 
+                    team.leader?.id == employeeId || 
                     team.members?.any { it.employee?.id == employeeId } == true
                 }
                 _myTeams.value = Resource.Success(userTeams)
@@ -105,6 +108,13 @@ class ProfileViewModel(
         viewModelScope.launch {
             _articleCreationResult.value = Resource.Loading()
             _articleCreationResult.value = articleRepository.createArticle(request)
+        }
+    }
+    
+    fun deleteArticle(articleId: Long) {
+        viewModelScope.launch {
+            _articleDeletionResult.value = Resource.Loading()
+            _articleDeletionResult.value = articleRepository.deleteArticle(articleId)
         }
     }
 }

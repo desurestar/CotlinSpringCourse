@@ -4,7 +4,7 @@ data class ResearchTeam(
     val id: Long,
     val name: String,
     val description: String?,
-    val leader: Employee,
+    val leader: Employee?,
     val createdAt: String?,
     val members: List<TeamMember>? = null,
     val researchWorks: List<TeamResearchWork>? = null

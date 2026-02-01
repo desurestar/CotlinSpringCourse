@@ -3,7 +3,6 @@ package kaf.pin.lab1corp.DTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.time.LocalDate;
 import java.util.List;
 
 public class ArticleCreateDTO {
@@ -19,7 +18,7 @@ public class ArticleCreateDTO {
     @Size(max = 500, message = "Ссылка не может превышать 500 символов")
     private String externalLink;
     
-    private LocalDate publicationDate;
+    private String publicationDate;
     
     @NotNull(message = "Основной автор обязателен")
     private Long mainAuthorId;
@@ -36,8 +35,8 @@ public class ArticleCreateDTO {
     public String getExternalLink() { return externalLink; }
     public void setExternalLink(String externalLink) { this.externalLink = externalLink; }
     
-    public LocalDate getPublicationDate() { return publicationDate; }
-    public void setPublicationDate(LocalDate publicationDate) { this.publicationDate = publicationDate; }
+    public String getPublicationDate() { return publicationDate; }
+    public void setPublicationDate(String publicationDate) { this.publicationDate = publicationDate; }
     
     public Long getMainAuthorId() { return mainAuthorId; }
     public void setMainAuthorId(Long mainAuthorId) { this.mainAuthorId = mainAuthorId; }

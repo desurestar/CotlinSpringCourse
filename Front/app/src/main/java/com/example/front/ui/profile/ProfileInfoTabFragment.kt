@@ -53,6 +53,11 @@ class ProfileInfoTabFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Ensure data is loaded if not already available
+        if (viewModel.currentEmployee.value == null && employeeId != -1L) {
+            viewModel.getCurrentEmployee(employeeId)
+        }
+        
         observeEmployee()
     }
 
