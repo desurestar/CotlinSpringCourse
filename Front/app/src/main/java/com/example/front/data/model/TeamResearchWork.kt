@@ -2,11 +2,12 @@ package com.example.front.data.model
 
 data class TeamResearchWork(
     val id: Long,
+    val teamId: Long? = null,
     val title: String,
     val description: String,
     val status: String,
     val startDate: String?,
-    val endDate: String?,
+    val endDate: String? = null,
     val createdAt: String?
 ) {
     fun getStatusText(): String {

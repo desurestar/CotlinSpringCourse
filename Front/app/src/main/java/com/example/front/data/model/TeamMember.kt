@@ -2,6 +2,7 @@ package com.example.front.data.model
 
 data class TeamMember(
     val id: Long,
+    val teamId: Long? = null,
     val employee: Employee?,
     val student: Student?,
     val role: String,
