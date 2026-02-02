@@ -74,7 +74,12 @@ class ProfileFragment : Fragment() {
                     ).show()
                 }
             }
-            dialog.show(childFragmentManager, CreateArticleDialog.TAG)
+            // Prevent showing multiple instances if already added
+            if (childFragmentManager.findFragmentByTag(CreateArticleDialog.TAG) == null) {
+                dialog.show(childFragmentManager, CreateArticleDialog.TAG)
+            } else {
+                android.util.Log.d("ProfileFragment", "CreateArticleDialog already shown")
+            }
         }
 
         binding.fabCreateTeam.setOnClickListener {

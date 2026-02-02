@@ -82,7 +82,12 @@ class ProfileArticlesTabFragment : Fragment() {
                         Snackbar.LENGTH_SHORT
                     ).show()
                 }
-                dialog.show(childFragmentManager, CreateArticleDialog.TAG)
+                // Prevent showing multiple instances if already added
+                if (childFragmentManager.findFragmentByTag(CreateArticleDialog.TAG) == null) {
+                    dialog.show(childFragmentManager, CreateArticleDialog.TAG)
+                } else {
+                    android.util.Log.d("ProfileArticlesTabFragment", "CreateArticleDialog already shown")
+                }
             }
         } else {
             binding.btnCreateArticle.visibility = View.GONE

@@ -4,6 +4,12 @@ import jakarta.validation.Valid;
 import kaf.pin.lab1corp.DTO.ArticleCreateDTO;
 import kaf.pin.lab1corp.entity.Article;
 import kaf.pin.lab1corp.service.ArticleService;
+import kaf.pin.lab1corp.service.UserService;
+import kaf.pin.lab1corp.repository.EmployesRepository;
+import kaf.pin.lab1corp.entity.Employes;
+import kaf.pin.lab1corp.entity.Users;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +27,16 @@ import java.util.Optional;
 public class ArticleRestController {
     
     private final ArticleService articleService;
-    
+    private final UserService userService;
+    private final EmployesRepository employesRepository;
+
     @Autowired
-    public ArticleRestController(ArticleService articleService) {
+    public ArticleRestController(ArticleService articleService,
+                                 UserService userService,
+                                 EmployesRepository employesRepository) {
         this.articleService = articleService;
+        this.userService = userService;
+        this.employesRepository = employesRepository;
     }
     
     @GetMapping
@@ -102,15 +114,49 @@ public class ArticleRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteArticle(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteArticle(@PathVariable Long id, Authentication authentication) {
         System.out.println("SERVER: DELETE /api/articles/" + id + " called");
         try {
-            articleService.deleteArticle(id);
-            System.out.println("SERVER: Article " + id + " deleted successfully");
-            return ResponseEntity.noContent().build();
+            // If user has ADMIN role - allow
+            if (authentication != null && authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+                articleService.deleteArticle(id);
+                System.out.println("SERVER: Article " + id + " deleted by ADMIN");
+                return ResponseEntity.noContent().build();
+            }
+
+            // Otherwise verify that authenticated user corresponds to the main author
+            if (authentication == null || authentication.getName() == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
+            String email = authentication.getName();
+            Users user = userService.findByEmail(email).orElse(null);
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
+            Employes employee = employesRepository.findByUserId(user.getId()).orElse(null);
+            if (employee == null) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+
+            // Check ownership
+            Optional<Article> optArticle = articleService.getArticleById(id);
+            if (optArticle.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            Article article = optArticle.get();
+            if (article.getMainAuthor() != null && article.getMainAuthor().getId().equals(employee.getId())) {
+                articleService.deleteArticle(id);
+                System.out.println("SERVER: Article " + id + " deleted by author " + employee.getId());
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
         } catch (Exception e) {
             System.out.println("SERVER: Error deleting article " + id + ": " + e.getMessage());
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }

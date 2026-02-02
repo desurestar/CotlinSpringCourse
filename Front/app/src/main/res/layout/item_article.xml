@@ -106,9 +106,23 @@
             android:textColor="@color/text_secondary"
             android:textSize="32sp"
             app:layout_constraintBottom_toBottomOf="@id/tvArticleTitle"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnDelete"
             app:layout_constraintTop_toTopOf="@id/tvArticleTitle" />
 
+        <!-- Delete Button -->
+        <ImageButton
+            android:id="@+id/btnDelete"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Удалить"
+            android:padding="8dp"
+            android:scaleType="centerInside"
+            android:src="@android:drawable/ic_menu_delete"
+            android:tint="@color/text_secondary"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

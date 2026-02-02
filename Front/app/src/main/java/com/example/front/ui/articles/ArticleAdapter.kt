@@ -41,17 +41,17 @@ class ArticleAdapter(
                 }
             }
             
-            // Long press to delete (if delete callback is provided)
+            // If delete callback is provided, show delete button and set click handler
             if (onDeleteClick != null) {
-                binding.root.setOnLongClickListener {
+                binding.btnDelete.visibility = View.VISIBLE
+                binding.btnDelete.setOnClickListener {
                     val position = bindingAdapterPosition
                     if (position != RecyclerView.NO_POSITION) {
                         onDeleteClick.invoke(getItem(position))
-                        true
-                    } else {
-                        false
                     }
                 }
+            } else {
+                binding.btnDelete.visibility = View.GONE
             }
         }
 
@@ -81,6 +81,8 @@ class ArticleAdapter(
                 } else {
                     View.GONE
                 }
+                // Ensure delete button visibility aligns with adapter callback
+                btnDelete.visibility = if (onDeleteClick != null) View.VISIBLE else View.GONE
             }
         }
     }

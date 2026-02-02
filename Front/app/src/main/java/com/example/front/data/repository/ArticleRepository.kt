@@ -74,7 +74,10 @@ class ArticleRepository(private val apiService: ApiService) {
             if (response.isSuccessful) {
                 Resource.Success(Unit)
             } else {
-                Resource.Error("Не удалось удалить статью")
+                val code = response.code()
+                val body = try { response.errorBody()?.string() } catch (e: Exception) { null }
+                android.util.Log.e("ArticleRepository", "Delete failed: code=$code, body=$body")
+                Resource.Error("Не удалось удалить статью: ${code}")
             }
         } catch (e: Exception) {
             Resource.Error(e.message ?: "Ошибка удаления статьи")

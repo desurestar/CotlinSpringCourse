@@ -69,7 +69,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/**").hasAnyRole("ADMIN", "EMPLOYEE")
                         .requestMatchers(HttpMethod.PUT, "/api/**").hasAnyRole("ADMIN", "EMPLOYEE")
 
-                        // API DELETE endpoints - require ADMIN role
+                        // API DELETE endpoints - allow authenticated for articles (controller will enforce ownership),
+                        // other DELETE endpoints require ADMIN
+                        .requestMatchers(HttpMethod.DELETE, "/api/articles/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN")
 
                         // Web endpoints
