@@ -34,6 +34,7 @@ public class ArticleRestController {
     
     @GetMapping("/{id}")
     public ResponseEntity<Article> getArticleById(@PathVariable Long id) {
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++==");
         Optional<Article> article = articleService.getArticleById(id);
         return article.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -49,7 +50,7 @@ public class ArticleRestController {
         return ResponseEntity.ok(articleService.searchArticles(query));
     }
     
-    @PostMapping
+    @PostMapping()
     public ResponseEntity<Article> createArticle(@Valid @RequestBody ArticleCreateDTO dto) {
         try {
             System.out.println("SERVER: Creating article with data: " + dto);
