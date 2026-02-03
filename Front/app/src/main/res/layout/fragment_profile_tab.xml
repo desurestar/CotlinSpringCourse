@@ -46,6 +46,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- RecyclerView for teams/articles lists -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvTeams"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnCreateArticle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <!-- Create Article Button (only shown for main author tab) -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCreateArticle"
@@ -53,6 +64,19 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="+ Создать статью"
+        android:visibility="gone"
+        app:icon="@android:drawable/ic_input_add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Create Research Team Button (only shown for teams tab) -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnCreateTeam"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="+ Создать коллектив"
         android:visibility="gone"
         app:icon="@android:drawable/ic_input_add"
         app:layout_constraintBottom_toBottomOf="parent"

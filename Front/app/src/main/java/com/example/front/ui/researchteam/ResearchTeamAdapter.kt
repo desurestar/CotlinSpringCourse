@@ -9,7 +9,9 @@ import com.example.front.data.model.ResearchTeam
 import com.example.front.databinding.ItemResearchTeamBinding
 
 class ResearchTeamAdapter(
-    private val onItemClick: (ResearchTeam) -> Unit
+    private val onItemClick: (ResearchTeam) -> Unit,
+    private val onDeleteClick: ((ResearchTeam) -> Unit)? = null,
+    private val onItemLongClick: ((ResearchTeam) -> Unit)? = null
 ) : ListAdapter<ResearchTeam, ResearchTeamAdapter.TeamViewHolder>(TeamDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TeamViewHolder {
@@ -41,6 +43,21 @@ class ResearchTeamAdapter(
             
             binding.root.setOnClickListener {
                 onItemClick(team)
+            }
+
+            binding.root.setOnLongClickListener {
+                onItemLongClick?.invoke(team)
+                true
+            }
+
+            // Delete button
+            binding.btnDeleteTeam?.let { btn ->
+                if (onDeleteClick != null) {
+                    btn.visibility = android.view.View.VISIBLE
+                    btn.setOnClickListener { onDeleteClick.invoke(team) }
+                } else {
+                    btn.visibility = android.view.View.GONE
+                }
             }
         }
     }

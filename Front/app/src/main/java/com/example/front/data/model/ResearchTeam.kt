@@ -16,5 +16,6 @@ data class ResearchTeam(
 data class ResearchTeamCreateRequest(
     val name: String,
     val description: String?,
-    val leaderId: Long
+    val leaderId: Long,
+    val memberIds: List<Long>? = null
 )

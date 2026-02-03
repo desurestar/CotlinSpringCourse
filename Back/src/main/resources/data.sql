@@ -11,7 +11,7 @@ INSERT INTO post (post_name) VALUES
 ('Deputy Department Head');
 
 INSERT INTO users (email, password, role, enabled) VALUES
-('john.doe@company.com', 'password123', 'EMPLOYEE', true),
+('test@test.com', '111111', 'EMPLOYEE', true),
 ('jane.smith@company.com', 'password123', 'EMPLOYEE', true),
 ('mike.johnson@company.com', 'password123', 'EMPLOYEE', true),
 ('sarah.wilson@company.com', 'password123', 'ADMIN', true),

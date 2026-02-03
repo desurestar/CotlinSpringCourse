@@ -49,10 +49,10 @@ class ResearchTeamListFragment : Fragment() {
     }
     
     private fun setupRecyclerView() {
-        adapter = ResearchTeamAdapter { team ->
+        adapter = ResearchTeamAdapter({ team ->
             val action = ResearchTeamListFragmentDirections.actionTeamListToTeamDetail(team.id)
             findNavController().navigate(action)
-        }
+        })
         binding.rvTeams.layoutManager = LinearLayoutManager(requireContext())
         binding.rvTeams.adapter = adapter
     }

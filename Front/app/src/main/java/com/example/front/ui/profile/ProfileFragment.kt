@@ -55,50 +55,9 @@ class ProfileFragment : Fragment() {
         } else {
             showProfileContent()
             loadProfileData()
-            setupFAB()
         }
     }
     
-    private fun setupFAB() {
-        binding.fabCreateArticle.setOnClickListener {
-            val dialog = CreateArticleDialog.newInstance()
-            dialog.setOnArticleCreatedListener {
-                // Refresh articles list
-                val employeeId = preferencesManager.getEmployeeId()
-                if (employeeId != -1L) {
-                    viewModel.refreshEmployeeArticlesAsAuthor(employeeId)
-                    Snackbar.make(
-                        binding.root,
-                        "Статья успешно создана",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                }
-            }
-            // Prevent showing multiple instances if already added
-            if (childFragmentManager.findFragmentByTag(CreateArticleDialog.TAG) == null) {
-                dialog.show(childFragmentManager, CreateArticleDialog.TAG)
-            } else {
-                android.util.Log.d("ProfileFragment", "CreateArticleDialog already shown")
-            }
-        }
-
-        binding.fabCreateTeam.setOnClickListener {
-            val dialog = CreateResearchTeamDialog.newInstance()
-            dialog.setOnTeamCreatedListener {
-                // Refresh teams list
-                val employeeId = preferencesManager.getEmployeeId()
-                if (employeeId != -1L) {
-                    viewModel.refreshEmployeeResearchTeams(employeeId)
-                    Snackbar.make(
-                        binding.root,
-                        "Научный коллектив успешно создан",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                }
-            }
-            dialog.show(childFragmentManager, CreateResearchTeamDialog.TAG)
-        }
-    }
     
     private fun showGuestMode() {
         binding.guestCard.visibility = View.VISIBLE

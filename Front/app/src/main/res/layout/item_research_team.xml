@@ -48,8 +48,19 @@
             android:ellipsize="end"
             app:layout_constraintTop_toTopOf="@id/iconBackground"
             app:layout_constraintStart_toEndOf="@id/iconBackground"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnDeleteTeam"
             android:layout_marginStart="16dp"/>
+
+        <ImageButton
+            android:id="@+id/btnDeleteTeam"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_delete"
+            android:contentDescription="Удалить коллектив"
+            android:tint="@color/text_secondary"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
             android:id="@+id/tvLeader"

@@ -6,9 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import com.example.front.data.api.RetrofitClient
 import com.example.front.data.local.PreferencesManager
 import com.example.front.data.model.ResearchTeamCreateRequest
+import com.example.front.data.model.Employee
 import com.example.front.data.repository.ArticleRepository
 import com.example.front.data.repository.EmployeeRepository
 import com.example.front.data.repository.ResearchTeamRepository
@@ -33,6 +36,14 @@ class CreateResearchTeamDialog : DialogFragment() {
 
     private var onTeamCreated: (() -> Unit)? = null
 
+    private var employees: List<Employee> = emptyList()
+    private val selectedMemberIds = mutableSetOf<Long>()
+    private val employeeRepository by lazy {
+        val preferencesManager = PreferencesManager(requireContext())
+        val apiService = RetrofitClient.getApiService { preferencesManager.getToken() }
+        com.example.front.data.repository.EmployeeRepository(apiService)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,6 +57,42 @@ class CreateResearchTeamDialog : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupDialog()
+        loadEmployees()
+    }
+
+    private fun loadEmployees() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val result = employeeRepository.getEmployees()
+                when (result) {
+                    is Resource.Success -> {
+                        employees = result.data ?: emptyList()
+                        setupMemberChips()
+                    }
+                    is Resource.Error -> {
+                        android.util.Log.e("CreateResearchTeamDialog", "Error loading employees: ${result.message}")
+                    }
+                    is Resource.Loading -> {}
+                }
+            } catch (e: Exception) {
+                android.util.Log.e("CreateResearchTeamDialog", "Exception loading employees", e)
+            }
+        }
+    }
+
+    private fun setupMemberChips() {
+        val currentEmployeeId = PreferencesManager(requireContext()).getEmployeeId()
+        val available = employees.filter { it.id != currentEmployeeId }
+        available.forEach { emp ->
+            val chip = com.google.android.material.chip.Chip(requireContext()).apply {
+                text = emp.name
+                isCheckable = true
+                setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) selectedMemberIds.add(emp.id) else selectedMemberIds.remove(emp.id)
+                }
+            }
+            binding.chipGroupMembers.addView(chip)
+        }
     }
 
     private fun setupDialog() {
@@ -86,11 +133,19 @@ class CreateResearchTeamDialog : DialogFragment() {
         binding.progressBar.visibility = View.VISIBLE
         binding.btnCreate.isEnabled = false
 
-        // Create team
+        // Parse manual member IDs (comma-separated)
+        val manualIds = binding.etMemberIds?.text.toString()
+            .split(",")
+            .mapNotNull { it.trim().toLongOrNull() }
+
+        val allMemberIds = (selectedMemberIds + manualIds).toList().takeIf { it.isNotEmpty() }
+
+        // Create team with optional members
         val request = ResearchTeamCreateRequest(
             name = name,
             description = description,
-            leaderId = leaderId
+            leaderId = leaderId,
+            memberIds = allMemberIds
         )
 
         viewModel.createResearchTeam(request)

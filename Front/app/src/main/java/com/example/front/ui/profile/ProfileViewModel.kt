@@ -47,6 +47,9 @@ class ProfileViewModel(
     // LiveData for one-time events
     private val _teamCreationResult = MutableLiveData<Resource<ResearchTeam>>()
     val teamCreationResult: LiveData<Resource<ResearchTeam>> = _teamCreationResult
+
+    private val _teamDeletionResult = MutableLiveData<Resource<Unit>>()
+    val teamDeletionResult: LiveData<Resource<Unit>> = _teamDeletionResult
     
     private val _articleCreationResult = MutableLiveData<Resource<Article>>()
     val articleCreationResult: LiveData<Resource<Article>> = _articleCreationResult
@@ -185,6 +188,25 @@ class ProfileViewModel(
             } catch (e: Exception) {
                 Log.e(TAG, "Exception creating team", e)
                 _teamCreationResult.value = Resource.Error("Ошибка создания коллектива: ${e.message}")
+            }
+        }
+    }
+
+    fun deleteTeam(teamId: Long) {
+        viewModelScope.launch {
+            try {
+                Log.d(TAG, "Deleting team ID: $teamId")
+                _teamDeletionResult.value = Resource.Loading()
+                val result = researchTeamRepository.deleteTeam(teamId)
+                _teamDeletionResult.value = result
+                when (result) {
+                    is Resource.Success -> Log.d(TAG, "Team deleted successfully")
+                    is Resource.Error -> Log.e(TAG, "Error deleting team: ${result.message}")
+                    is Resource.Loading -> {}
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Exception deleting team", e)
+                _teamDeletionResult.value = Resource.Error("Ошибка удаления коллектива: ${e.message}")
             }
         }
     }

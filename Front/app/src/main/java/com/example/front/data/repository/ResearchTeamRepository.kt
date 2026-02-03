@@ -18,7 +18,30 @@ class ResearchTeamRepository(private val apiService: ApiService) {
     suspend fun getResearchTeamById(id: Long): Resource<ResearchTeam> {
         return try {
             val response = apiService.getResearchTeamById(id)
-            Resource.Success(response)
+
+            // If members are missing in the main response, try to fetch them via dedicated endpoint
+            val members = response.members
+            return if (members == null || members.isEmpty()) {
+                try {
+                    val membersResp = apiService.getTeamMembers(id)
+                    // Create a new ResearchTeam instance with members filled
+                    val filled = ResearchTeam(
+                        id = response.id,
+                        name = response.name,
+                        description = response.description,
+                        leader = response.leader,
+                        createdAt = response.createdAt,
+                        members = membersResp,
+                        researchWorks = response.researchWorks
+                    )
+                    Resource.Success(filled)
+                } catch (e: Exception) {
+                    // If members endpoint fails, still return original response
+                    Resource.Success(response)
+                }
+            } else {
+                Resource.Success(response)
+            }
         } catch (e: Exception) {
             Resource.Error(e.message ?: "Ошибка загрузки коллектива")
         }
